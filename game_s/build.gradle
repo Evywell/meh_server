@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'mysql:mysql-connector-java:5.1.34'
+        classpath 'org.flywaydb:flyway-gradle-plugin:6.4.0'
+    }
+}
+
+plugins {
+    id 'java' 
+    id 'application'
+    id 'org.flywaydb.flyway' version '6.4.0'
+}
+
+dependencies {
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
+    compile group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
+    compile group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
+    compile project(':common')
+}
+
+flyway {
+    url = 'jdbc:mysql://localhost:33306/rob_world?user=root&password=root'
+    locations = ['filesystem:./resources/db/migrations']
+}
+
+mainClassName = 'fr.evywell.robgame.Main'

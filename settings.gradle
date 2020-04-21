@@ -1,0 +1,4 @@
+rootProject.name = 'rob_server'
+include 'common'
+include 'auth_s'
+include 'game_s'

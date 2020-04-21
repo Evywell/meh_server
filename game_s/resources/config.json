@@ -1,0 +1,27 @@
+{
+    "realmId": 1, 
+    "realmName": "Main",
+    "ip": "127.0.0.1",
+    "port": 8889,
+    "databases": {
+        "world": {
+            "host": "127.0.0.1",
+            "port": 33306,
+            "user": "root",
+            "password": "root",
+            "database": "rob_world"
+        },
+        "characters": {
+            "host": "127.0.0.1",
+            "port": 33306,
+            "user": "root",
+            "password": "root",
+            "database": "rob_characters"
+        }
+    },
+    "authServer": {
+        "ip": "127.0.0.1",
+        "port": 8888,
+        "clientId": "a_client_id"
+    }
+}
