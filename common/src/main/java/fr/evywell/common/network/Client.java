@@ -5,12 +5,12 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import java.util.concurrent.TimeUnit;
 
 public abstract class Client {
 
     private final String ip;
     private final int port;
+    private EventLoopGroup workerGroup;
     protected ChannelFuture channel;
 
     public Client(String ip, int port) {
@@ -19,7 +19,7 @@ public abstract class Client {
     }
 
     public void connect() throws Exception {
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        workerGroup = new NioEventLoopGroup();
 
         Bootstrap b = new Bootstrap();
         b
@@ -29,6 +29,8 @@ public abstract class Client {
             .handler(getHandler());
 
         channel = b.connect(ip, port);
+
+        channel.sync();
 
         if (!channel.isDone()) {
             throw new Exception("Create connection to " + ip + ":" + port + " timeout!");
@@ -48,6 +50,7 @@ public abstract class Client {
             return;
         }
         this.channel.channel().close();
+        workerGroup.shutdownGracefully();
     }
 
 }

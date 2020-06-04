@@ -23,5 +23,6 @@
         "ip": "127.0.0.1",
         "port": 8888,
         "clientId": "a_client_id"
-    }
+    },
+    "virtualMapFolder": "/Users/evywell/Documents/rob_server/game_s/resources/vmaps/"
 }

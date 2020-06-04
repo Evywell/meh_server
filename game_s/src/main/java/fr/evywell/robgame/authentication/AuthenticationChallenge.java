@@ -11,6 +11,7 @@ import fr.evywell.common.network.Packet;
 import fr.evywell.robgame.database.AuthQuery;
 import fr.evywell.robgame.network.WorldServer;
 import fr.evywell.robgame.network.WorldSession;
+import fr.evywell.robgame.world.World;
 import fr.evywell.robgame.world.character.Character;
 
 import java.sql.ResultSet;
@@ -30,13 +31,15 @@ public class AuthenticationChallenge {
     private final AuthTram tram;
     private final WorldSession session;
     private final String secret;
+    private final World world;
     private final EncryptionInterface encryption;
     private final Database chardb;
 
-    public AuthenticationChallenge(AuthTram tram, WorldSession session, String secret) {
+    public AuthenticationChallenge(AuthTram tram, WorldSession session, String secret, World world) {
         this.tram = tram;
         this.session = session;
         this.secret = secret;
+        this.world = world;
         this.encryption = new AESEncryption();
         this.chardb = (Database) Container.getInstance(Service.SERVICE_DATABASE_CHARACTERS);
     }
@@ -96,6 +99,7 @@ public class AuthenticationChallenge {
             pck.add("characters", characters);
             session.send(pck);
             Log.info(String.format("Utilisateur <%s> authentifié avec succès", uuid));
+            world.addSession(session);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -5,12 +5,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public class ClientChannelHandler extends ChannelInboundHandlerAdapter {
 
-    private AuthClient client;
     private ClientResponseFuture responseFuture;
-
-    public ClientChannelHandler(AuthClient client) {
-        this.client = client;
-    }
 
     public void setResponseFuture(ClientResponseFuture future) {
         this.responseFuture = future;

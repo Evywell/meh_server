@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+dependencies {
+    compile project(':tools')
+    compile project(':game_s')
+}
+
+mainClassName = 'fr.evywell.sandbox.Main'

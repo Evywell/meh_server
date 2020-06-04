@@ -1,21 +1,9 @@
 package fr.evywell.robgame.world.character;
 
-import fr.evywell.common.container.Container;
-import fr.evywell.common.container.Service;
 import fr.evywell.common.database.Database;
-import fr.evywell.common.database.PreparedStatement;
 import fr.evywell.common.network.Packet;
-import fr.evywell.robgame.database.CharacterQuery;
-import fr.evywell.robgame.network.WorldServer;
-import fr.evywell.robgame.network.WorldSession;
-import fr.evywell.robgame.opcode.Handler;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static fr.evywell.robgame.opcode.Opcode.SMSG_ACCOUNT_CHARACTER_LIST;
+import fr.evywell.common.network.Session;
+import fr.evywell.common.opcode.Handler;
 
 public class CharacterListHandler implements Handler {
 
@@ -26,7 +14,7 @@ public class CharacterListHandler implements Handler {
     }
 
     @Override
-    public void call(WorldSession session, Object payload, Packet packet) {
+    public void call(Session session, Object payload, Packet packet) {
         /*
         // Bon, ici la personne est censée être identifiée
         // On récupère la liste des personnage du realm

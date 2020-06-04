@@ -28,7 +28,7 @@ public class AuthClient extends Client {
 
     @Override
     public ChannelHandler getHandler() {
-        return new ClientChannelInitializer(this);
+        return new ClientChannelInitializer();
     }
 
     public void setClientId(String clientId) {

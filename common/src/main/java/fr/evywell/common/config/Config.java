@@ -15,6 +15,7 @@ import java.util.Map;
 public class Config {
 
     private final String configPath;
+    private String resourcePath;
     private Map<String, ConfigHandler> handlers;
     private boolean parsed;
     private JSONObject parsedContent;
@@ -61,4 +62,11 @@ public class Config {
         }
     }
 
+    public String getResourcePath() {
+        return resourcePath;
+    }
+
+    public void setResourcePath(String resourcePath) {
+        this.resourcePath = resourcePath;
+    }
 }

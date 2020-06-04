@@ -1,5 +1,6 @@
 package fr.evywell.robauth.authentification;
 
+import fr.evywell.common.timer.Stopwatch;
 import fr.evywell.common.utils.Password;
 import fr.evywell.robauth.database.AuthQuery;
 import fr.evywell.robauth.network.AuthServer;
@@ -26,6 +27,7 @@ public class LogonChallenge {
     private final AuthSession session;
     private Database authDb;
 
+    private Stopwatch sw;
     private RandomString randomString; // Générateur de token
 
     public LogonChallenge(AuthTram tram, AuthSession session) {
@@ -33,9 +35,11 @@ public class LogonChallenge {
         this.session = session;
         this.authDb = (Database) Container.getInstance(Service.SERVICE_DATABASE_AUTH);
         this.randomString = new RandomString();
+        this.sw = new Stopwatch();
     }
 
     public void proceed() {
+        this.sw.start();
         Log.info(String.format("AUTH_LOGON_CHALLENGE initialized for %s", session.getIp()));
 
         PreparedStatement stmt = this.authDb.getPreparedStatement(AuthQuery.AUTH_SEL_ACCOUNT_INFO);
@@ -107,5 +111,7 @@ public class LogonChallenge {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        this.sw.stop();
+        Log.debug(String.format("AUTH_LOGON_CHALLENGE finished in %s ms", sw.getDiffTime()));
     }
 }

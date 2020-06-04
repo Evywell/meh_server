@@ -10,15 +10,11 @@ import fr.evywell.common.network.BasicServerInitializer;
 import fr.evywell.common.network.RequestFoundation;
 import fr.evywell.robgame.authentication.ClientTram;
 import fr.evywell.robgame.config.*;
-import fr.evywell.robgame.game.map.Cell;
-import fr.evywell.robgame.game.map.Grid;
 import fr.evywell.robgame.network.GameServerHandler;
 import fr.evywell.robgame.network.WorldServer;
 import fr.evywell.robgame.world.World;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 public class Main {
 
@@ -31,12 +27,17 @@ public class Main {
         String projectPath = System.getProperty("user.dir");
         resourcesPath = projectPath + File.separator + "resources" + File.separator;
         config = new Config(resourcesPath + "config.json");
+        config.setResourcePath(resourcesPath);
         config
             .configHandler(new RealmConfigHandler()) // Gère la configuration du realm
+            .configHandler(new VMapConfigHandler()) // Gère la configuration des vmaps
             .configHandler(new DatabaseConfigHandler()) // Gère la configuration des bases de données
             .configHandler(new AuthConfigHandler()); // Gère la configuration du serveur d'authentification
 
+        Container.setInstance(fr.evywell.robgame.Service.CONFIG, config);
+
         World world = new World(config);
+        Container.setInstance(fr.evywell.robgame.Service.WORLD, world);
         server = new WorldServer(world, 1337);
         server.handle(new BasicServerInitializer(null, new GameServerHandler(server)));
         server.start();
@@ -63,6 +64,7 @@ public class Main {
             ClientTram tram = rq.getBody().read(ClientTram.class);
             server.setSecret(tram.secret);
             Log.info("Clé secret ajoutée au serveur");
+            client.close();
         } catch (Exception e) {
             Log.error("Impossible de contacter le serveur d'authentification pour récupérer la clé secret");
             System.out.println(e.toString());

@@ -6,8 +6,9 @@ import fr.evywell.common.network.Packet;
 import fr.evywell.common.network.Server;
 import fr.evywell.common.network.Session;
 import fr.evywell.robgame.Service;
-import fr.evywell.robgame.opcode.Handler;
-import fr.evywell.robgame.opcode.OpcodeHandler;
+import fr.evywell.common.opcode.Handler;
+import fr.evywell.common.opcode.OpcodeHandler;
+import fr.evywell.robgame.game.gameobject.Player;
 import io.netty.channel.Channel;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class WorldSession extends Session {
     private List<PrePacket> queue;
     private OpcodeHandler handler;
     private String userUUID;
+    private Player player;
 
     public WorldSession(Server server, Channel channel) {
         super(server, channel);
@@ -72,5 +74,13 @@ public class WorldSession extends Session {
         super.kick();
         this.authenticated = false;
         ((WorldServer) this.getServer()).getWorld().removeSession(this);
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

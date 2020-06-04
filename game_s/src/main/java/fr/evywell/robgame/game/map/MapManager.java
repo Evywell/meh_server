@@ -3,24 +3,22 @@ package fr.evywell.robgame.game.map;
 import fr.evywell.common.container.Container;
 import fr.evywell.common.container.Service;
 import fr.evywell.common.database.Database;
-import fr.evywell.common.database.PreparedStatement;
 import fr.evywell.common.logger.Log;
 import fr.evywell.robgame.database.WorldQuery;
+import fr.evywell.robgame.game.map.grid.Grid;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class MapManager {
 
-    private List<Map> maps;
+    private java.util.Map<Integer, Map> maps;
     private java.util.Map<Integer, Map.MapStructure> cachedMaps;
 
     public MapManager() {
-        this.maps = new ArrayList<>();
+        this.maps = new HashMap<>();
         this.cachedMaps = new HashMap<>();
     }
 
@@ -45,9 +43,13 @@ public class MapManager {
     }
 
     public void update(int delta) {
-        for (Map m : maps) {
-            m.update(delta);
+        for (java.util.Map.Entry<Integer, Map> m : maps.entrySet()) {
+            m.getValue().update(delta);
         }
+    }
+
+    public Map getMap(int mapId) {
+        return maps.get(mapId);
     }
 
     public Map createMap(int mapId, int instanceId, int maxPlayer) throws Exception {
@@ -55,15 +57,23 @@ public class MapManager {
             throw new Exception(String.format("Impossible de créer la carte %d car inconnue", mapId));
         }
         Map.MapStructure structure = cachedMaps.get(mapId);
-        Map m = new Map(mapId, instanceId, maxPlayer);
+        Map m = new Map(mapId, instanceId, maxPlayer, structure.gridW, structure.gridH);
         Log.info("Chargement de la carte mapId=" + mapId + " instanceId=" + instanceId);
         // On construit la grille
         Grid g = new Grid(structure.gridW, structure.gridH);
         g.fillGrid();
         m.attachGrid(g);
+
+        VirtualMap vmap = new VirtualMap(m);
+        vmap.loadMapData();
+
+        m.setVirtualMap(vmap);
+
+        // Chargement de la NavMesh
+        // TODO: Faire ça
         // Initialisation des créatures et gameobjects
         m.loadCreatures();
-        this.maps.add(m);
+        this.maps.put(mapId, m);
         return m;
     }
 

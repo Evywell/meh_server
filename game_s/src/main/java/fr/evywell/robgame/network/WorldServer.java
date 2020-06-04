@@ -1,6 +1,7 @@
 package fr.evywell.robgame.network;
 
 import com.jsoniter.JsonIterator;
+import fr.evywell.common.logger.Log;
 import fr.evywell.common.network.MalformedRequestException;
 import fr.evywell.common.network.Server;
 import fr.evywell.common.network.Session;
@@ -8,6 +9,7 @@ import fr.evywell.robgame.Main;
 import fr.evywell.robgame.authentication.AuthTram;
 import fr.evywell.robgame.authentication.AuthenticationChallenge;
 import fr.evywell.robgame.world.World;
+import fr.evywell.robgame.world.WorldTime;
 
 import java.io.IOException;
 
@@ -37,6 +39,7 @@ public class WorldServer extends Server {
             currentTime = System.currentTimeMillis();
             int diff = (int) (currentTime - previousTime);
 
+            WorldTime.setDeltaTime(diff);
             world.update(diff);
 
             previousTime = currentTime;
@@ -81,7 +84,7 @@ public class WorldServer extends Server {
         if (_cmd == WORLD_AUTHENTICATION_CHALLENGE) {
             try {
                 AuthTram tram = iterator.read(AuthTram.class);
-                (new AuthenticationChallenge(tram, ((WorldSession) session), secret)).proceed();
+                (new AuthenticationChallenge(tram, ((WorldSession) session), secret, world)).proceed();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -18,12 +18,18 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
     compile group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
     compile group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
+    compile "org.flywaydb:flyway-core:6.4.0"
     compile project(':common')
 }
 
 flyway {
-    url = 'jdbc:mysql://localhost:33306/rob_world?user=root&password=root'
-    locations = ['filesystem:./resources/db/migrations']
+    url = 'jdbc:mysql://localhost:33306'
+    schemas = ['rob_world2']
+    user = 'root'
+    password = 'root'
+    locations = ['classpath:db/migration']
+    configurations = [ 'compileClasspath' ]
+    //locations = ['filesystem:./resources/db/migrations/world']
 }
 
 mainClassName = 'fr.evywell.robgame.Main'

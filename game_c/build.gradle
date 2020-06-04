@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+dependencies {
+    compile group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
+    compile group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
+    compile project(':common')
+}
+
+mainClassName = 'fr.evywell.robclient.Main'

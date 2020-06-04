@@ -1,6 +1,5 @@
 package fr.evywell.robauth.network;
 
-import com.jsoniter.JsonIterator;
 import fr.evywell.common.logger.Log;
 import fr.evywell.common.network.RequestFoundation;
 import fr.evywell.common.network.Server;
