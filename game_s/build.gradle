@@ -15,9 +15,14 @@ plugins {
 }
 
 dependencies {
+    //compile fileTree(include: ['*.jar'], dir: 'libs')
+}
+
+dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
     compile group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
     compile group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
+    compile "cz.advel.jbullet:jbullet:20101010-1"
     compile "org.flywaydb:flyway-core:6.4.0"
     compile project(':common')
 }
