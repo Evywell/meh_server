@@ -51,8 +51,42 @@ public class Map {
         this.go.add(go);
         grid.addToGrid(go);
         go.setMap(this);
-        Cell cell = this.grid.getCellFromGameObject(go);
-        go.setCell(cell);
+    }
+
+    public GameObject[] getGameObjectsInAreaOf(GameObject go) {
+        Cell[] cells = go.getCell().getNeighboring();
+        List<GameObject> gameObjects = new ArrayList<>();
+        for (Cell cell : cells) {
+            List<GameObject> cellGos = cell.getGameObjects();
+            if (cellGos.isEmpty()) {
+                continue;
+            }
+            // On récupère les game objects de la cellule
+            if (cell.equals(go.getCell())) {
+                if (cellGos.size() == 1) {
+                    // Le seul Go dans la cellule est celui passé en paramètre
+                    continue;
+                }
+                // Si la cellule du gameobject passé en paramètres correspond à la cellule en cours
+                // On trie les game objects pour pas qu'elle n'apparaisse dans la liste
+                int i = cellGos.indexOf(go);
+                // Si le go est le dernier de la liste, on prend TOUT sauf le dernier
+                if (i == cellGos.size() - 1) {
+                    gameObjects.addAll(cellGos.subList(0, cellGos.size() - 2));
+                // Si c'est le premier, on prend TOUT sauf le premier
+                } else if (i == 0 && cellGos.size() > 1) {
+                    gameObjects.addAll(cellGos.subList(1, cellGos.size() - 1));
+                } else {
+                    gameObjects.addAll(cellGos.subList(0, i - 1));
+                    gameObjects.addAll(cellGos.subList(i + 1, cellGos.size() - 1));
+                }
+            } else {
+                gameObjects.addAll(cellGos);
+            }
+        }
+
+        GameObject[] gos = new GameObject[gameObjects.size()];
+        return gameObjects.toArray(gos);
     }
 
     public void addPlayerToMap(Player p) {

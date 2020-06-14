@@ -7,6 +7,8 @@ import fr.evywell.robgame.game.map.grid.notifier.GridNotifier;
 import fr.evywell.robgame.game.map.Map;
 import fr.evywell.robgame.game.map.grid.notifier.PacketDeliverVisitor;
 
+import java.util.HashMap;
+
 public class GameObject {
 
     protected GridNotifier notifier;
@@ -40,6 +42,10 @@ public class GameObject {
         }
     }
 
+    public GameObject[] getGameObjectsInArea() {
+        return this.map.getGameObjectsInAreaOf(this);
+    }
+
     public Map getMap() {
         return map;
     }
@@ -67,4 +73,22 @@ public class GameObject {
                 ", orientation=" + orientation +
                 '}';
     }
+
+    public int getType() {
+        return GameObjectType.GAME_OBJECT;
+    }
+
+    public java.util.Map<String, Object> toMap() {
+        java.util.Map<String, Object> go = new HashMap<>();
+        go.put("uuid", uuid);
+        go.put("map_id", mapId);
+        go.put("pos_x", pos_x);
+        go.put("pos_y", pos_y);
+        go.put("pos_z", pos_z);
+        go.put("orientation", orientation);
+        go.put("type", getType());
+
+        return go;
+    }
+
 }

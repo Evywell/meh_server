@@ -15,6 +15,11 @@ public class Packet {
         return this;
     }
 
+    public Packet setData(Map<String, Object> data) {
+        this.data = data;
+        return this;
+    }
+
     public void setCmd(int _cmd) {
         this._cmd = _cmd;
     }

@@ -6,9 +6,12 @@ import fr.evywell.common.container.Service;
 import fr.evywell.common.database.Database;
 import fr.evywell.common.logger.Log;
 import fr.evywell.common.maths.Vector3;
+import fr.evywell.common.network.Packet;
 import fr.evywell.common.network.Session;
 import fr.evywell.robgame.config.RealmConfig;
 import fr.evywell.robgame.game.gameobject.CreatureManager;
+import fr.evywell.robgame.game.gameobject.GameObject;
+import fr.evywell.robgame.game.gameobject.GameObjectInfoPacket;
 import fr.evywell.robgame.game.gameobject.Player;
 import fr.evywell.robgame.game.map.MapManager;
 import fr.evywell.robgame.network.WorldSession;
@@ -89,6 +92,16 @@ public class World {
             map.addPlayerToMap(player);
             // On notifie tous les joueurs autour
             player.sendPacketToSet(new NewCharacterInWorldPacket(player), player);
+
+            // Il faut aussi la liste des joueurs autour de lui
+            // Ainsi que tous les gameobjects aux alentours
+            GameObject[] gos = player.getGameObjectsInArea();
+            Log.debug(String.format("Sending %d game objects information to %s", gos.length, player.name));
+            Packet gameObjectInfoPacket;
+            for (GameObject go : gos) {
+                gameObjectInfoPacket = new GameObjectInfoPacket(go);
+                session.send(gameObjectInfoPacket);
+            }
         }
     }
 

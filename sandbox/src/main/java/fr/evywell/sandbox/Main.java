@@ -32,7 +32,7 @@ public class Main {
                 .addWaterMap(resourcesPath + "watermaps/1_4.png", 50, 20)
                 .addWaterMap(resourcesPath + "watermaps/1_1.png", 50, 20)
                 .generate();
-
+/*
         Unit u = new Unit();
         u.pos_x = 85;
         u.pos_y = 45.9f;
@@ -56,6 +56,8 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+ */
     }
 
 }

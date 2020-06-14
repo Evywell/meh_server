@@ -19,8 +19,6 @@ public class Player extends Unit {
     private IntervalTimer timer;
     private WorldSession session;
 
-    public String name;
-
     public Player(WorldSession session) {
         this.timer = new IntervalTimer(300);
         this.session = session;
@@ -73,18 +71,11 @@ public class Player extends Unit {
         }
     }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> player = new HashMap<>();
-        player.put("name", this.name);
-        player.put("uuid", this.uuid);
-        player.put("map_id", this.mapId);
-        player.put("pos_x", this.pos_x);
-        player.put("pos_y", this.pos_y);
-        player.put("pos_z", this.pos_z);
-        player.put("orientation", this.orientation);
-
-        return player;
+    @Override
+    public int getType() {
+        return GameObjectType.PLAYER;
     }
+
 
     public void moveToDirection(Vector3 direction) {
         direction.multiply(this.getSpeed());

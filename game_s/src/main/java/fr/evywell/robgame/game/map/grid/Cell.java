@@ -1,5 +1,6 @@
 package fr.evywell.robgame.game.map.grid;
 
+import fr.evywell.robgame.game.gameobject.GameObject;
 import fr.evywell.robgame.game.map.grid.notifier.AbstractDeliverVisitor;
 import fr.evywell.robgame.game.map.grid.notifier.GridNotifier;
 
@@ -12,6 +13,7 @@ public class Cell {
     public final int y;
     private final Grid grid;
     private GridNotifier notifier;
+    private List<GameObject> gameObjects;
 
     public static final float CELL_WIDTH = 30f;
     public static final float CELL_HALF_WIDTH = CELL_WIDTH / 2f;
@@ -22,6 +24,17 @@ public class Cell {
         this.x = x;
         this.y = y;
         this.grid = grid;
+        this.gameObjects = new ArrayList<>();
+    }
+
+    public void addToCell(GameObject go) {
+        if (!this.gameObjects.contains(go)) {
+            this.gameObjects.add(go);
+        }
+    }
+
+    public void removeToCell(GameObject go) {
+        this.gameObjects.remove(go);
     }
 
     public void visitPlayers(AbstractDeliverVisitor visitor) {
@@ -88,6 +101,10 @@ public class Cell {
 
     public boolean hasNotifier() {
         return this.notifier == null;
+    }
+
+    public List<GameObject> getGameObjects() {
+        return this.gameObjects;
     }
 
     @Override

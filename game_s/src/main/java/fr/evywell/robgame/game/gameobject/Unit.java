@@ -6,6 +6,7 @@ import fr.evywell.robgame.game.map.grid.Grid;
 public class Unit extends GameObject {
 
     protected float speed = 1.0f;
+    public String name;
 
     public float getSpeed() {
         return speed; // TODO: Changer cette façon de récuperer la statistique (un système avec des flags, etc.)
@@ -23,5 +24,10 @@ public class Unit extends GameObject {
         this.orientation = orientation;
         this.map.moveGameObjectInMap(this);
         return true;
+    }
+
+    @Override
+    public int getType() {
+        return GameObjectType.UNIT;
     }
 }

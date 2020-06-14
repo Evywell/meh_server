@@ -22,7 +22,6 @@ public class Grid {
     public Grid(int width, int height) {
         this.width = width;
         this.height = height;
-        // TODO: Pour le moment, les notifiers ne servent à rien
         this.notifiers = new HashMap<>();
         this.notifiers.put(
                 GridNotifier.GridNotifierType.PLAYER,
@@ -47,6 +46,9 @@ public class Grid {
         } else {
             this.notifiers.get(GridNotifier.GridNotifierType.GAMEOBJECT).listen(go);
         }
+        Cell cell = getCellFromGameObject(go);
+        cell.addToCell(go);
+        go.setCell(cell);
     }
 
     public void removeToGrid(GameObject go) {
@@ -114,26 +116,15 @@ public class Grid {
     }
 
     public void moveGameObject(GameObject go) {
-        /*
-        if (go instanceof Creature) {
-            return;
-        }
         Cell originCell = go.getCell();
         Cell finalCell = this.getCellFromGameObject(go);
         if (finalCell.equals(originCell)) {
             // Les deux cellules sont identiques, il n'y a rien à faire
             return;
         }
-        // On remove les listeners si c'est un Player
-        if (go instanceof Player) {
-            Cell[] originCells = originCell.getNeighboring();
-            for (Cell c : originCells) {
-                notifier.dismiss(c, (Player) go);
-            }
-            this.addListenersForPlayer(finalCell, (Player) go);
-        }
-
-         */
+        originCell.removeToCell(go);
+        finalCell.addToCell(go);
+        go.setCell(finalCell);
     }
 
     public static boolean isValidPosition(Vector3 v, float orientation) {

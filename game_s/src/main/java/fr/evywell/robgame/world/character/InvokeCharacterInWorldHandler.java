@@ -9,6 +9,8 @@ import fr.evywell.common.network.Packet;
 import fr.evywell.common.network.Session;
 import fr.evywell.common.opcode.Handler;
 import fr.evywell.robgame.database.CharacterQuery;
+import fr.evywell.robgame.game.gameobject.GameObject;
+import fr.evywell.robgame.game.gameobject.GameObjectInfoPacket;
 import fr.evywell.robgame.game.gameobject.Player;
 import fr.evywell.robgame.network.WorldSession;
 import fr.evywell.robgame.opcode.Opcode;
@@ -53,10 +55,7 @@ public class InvokeCharacterInWorldHandler implements Handler {
             ((WorldSession) session).setPlayer(p);
 
             // On envoie les informations sur le joueur et on le place dans un queue
-            Packet pck = new Packet();
-            pck.setCmd(Opcode.SMSG_INVOKE_CHARACTER_IN_WORLD);
-            pck.add("player", p.toMap());
-            session.send(pck);
+            session.send(new InvokeCharacterInWorldPacket(p));
             world.putPlayerInQueue((WorldSession) session, p);
         } catch (SQLException e) {
             e.printStackTrace();
