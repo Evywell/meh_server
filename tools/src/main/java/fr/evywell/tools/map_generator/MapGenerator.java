@@ -1,6 +1,8 @@
 package fr.evywell.tools.map_generator;
 
 import fr.evywell.common.logger.Log;
+import fr.evywell.tools.wmo.WMOBuilder;
+import fr.evywell.tools.wmo.WorldGameObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,6 +18,7 @@ public class MapGenerator {
     private byte mapId;
     private List<Heightmap> heightmaps = new ArrayList<>();
     private List<Watermap> watermaps = new ArrayList<>();
+    private List<WorldGameObject> worldGameObjects = new ArrayList<>();
 
     public MapGenerator setOutputDir(String outputDir) {
         this.outputDir = outputDir;
@@ -54,6 +57,7 @@ public class MapGenerator {
                     dos.writeInt(hm.data[i]);
                 }
             }
+            //Watermaps
             for (Watermap wm : watermaps) {
                 Log.info("Watermap");
                 dos.writeByte(2); // Type
@@ -66,21 +70,30 @@ public class MapGenerator {
                     dos.writeInt(wm.data[i]);
                 }
             }
+            // WMO (World Map Objects)
+            for (WorldGameObject go : worldGameObjects) {
+                Log.info("Gameobject");
+                dos.writeByte(3); // Type
+
+            }
             dos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public MapGenerator addWMO(WMOBuilder builder) {
+        worldGameObjects = builder.getWorldGameObjectList();
+        return this;
+    }
+
     public MapGenerator addHeightMap(String filePath) {
         try {
             BufferedImage img = this.read(filePath);
-            int width = img.getWidth();
-            int height = img.getHeight();
             int[] data = this.getData(img);
             Heightmap hm = new Heightmap();
-            hm.width = width;
-            hm.height = height;
+            hm.width = img.getWidth();
+            hm.height = img.getHeight();
             hm.length = data.length;
             hm.data = data;
             heightmaps.add(hm);
@@ -93,12 +106,10 @@ public class MapGenerator {
     public MapGenerator addWaterMap(String filePath, float waterlevel, float depth) {
         try {
             BufferedImage img = this.read(filePath);
-            int width = img.getWidth();
-            int height = img.getHeight();
             int[] data = this.getData(img);
             Watermap wm = new Watermap();
-            wm.width = width;
-            wm.height = height;
+            wm.width = img.getWidth();
+            wm.height = img.getHeight();;
             wm.length = data.length;
             wm.waterlevel = waterlevel;
             wm.depth = depth;

@@ -3,11 +3,13 @@ package fr.evywell.sandbox;
 import fr.evywell.common.config.Config;
 import fr.evywell.common.container.Container;
 import fr.evywell.common.logger.Log;
+import fr.evywell.common.maths.Vector3;
 import fr.evywell.robgame.config.VMapConfigHandler;
 import fr.evywell.robgame.game.gameobject.Unit;
 import fr.evywell.robgame.game.map.Map;
 import fr.evywell.robgame.game.map.VirtualMap;
 import fr.evywell.tools.map_generator.MapGenerator;
+import fr.evywell.tools.wmo.WMOBuilder;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,6 +19,14 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
+        MapGenerator mapGenerator = new MapGenerator();
+        mapGenerator
+                .addWMO(
+                    (new WMOBuilder())
+                        .addBox(new Vector3(50, 50, 50), new Vector3(0, 0, 0)) // Une boite en 0.0.0 qui fait 100x100x100
+                )
+                .generate();
+        /*
         String projectPath = System.getProperty("user.dir");
         String resourcesPath = projectPath + File.separator + "sandbox" + File.separator + "resources" + File.separator;
         Config config = new Config(resourcesPath + "config.json");
@@ -56,6 +66,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+         */
     }
 
 }
