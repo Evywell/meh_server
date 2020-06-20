@@ -34,6 +34,7 @@ public class Creature extends Unit {
     }
 
     public static class Template {
-        public String uuid, name;
+        public int id;
+        public String name;
     }
 }

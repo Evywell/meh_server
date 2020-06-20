@@ -13,9 +13,9 @@ import java.util.Map;
 
 public class CreatureManager extends GameObjectManager {
 
-    private Map<String, Creature.Template> cachedCreatures = new HashMap<>();
+    private Map<Integer, Creature.Template> cachedCreatures = new HashMap<>();
 
-    public Creature.Template getCreatureTemplate(String uuid) {
+    public Creature.Template getCreatureTemplate(int uuid) {
         return cachedCreatures.get(uuid);
     }
 
@@ -27,9 +27,9 @@ public class CreatureManager extends GameObjectManager {
             Creature.Template ct;
             while (rs.next()) {
                 ct = new Creature.Template();
-                ct.uuid = rs.getString(1);
+                ct.id = rs.getInt(1);
                 ct.name = rs.getString(2);
-                cachedCreatures.put(ct.uuid, ct);
+                cachedCreatures.put(ct.id, ct);
             }
         } catch (SQLException e) {
             e.printStackTrace();

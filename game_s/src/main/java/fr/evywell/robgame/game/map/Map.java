@@ -109,8 +109,8 @@ public class Map {
             Creature.Template t;
             Creature c;
             while (rs.next()) {
-                String templateUuid = rs.getString(2);
-                t = this.creatureManager.getCreatureTemplate(templateUuid);
+                int templateId = rs.getInt(2);
+                t = this.creatureManager.getCreatureTemplate(templateId);
                 c = new Creature();
                 c.mapId = mapId;
                 c.name = t.name;
