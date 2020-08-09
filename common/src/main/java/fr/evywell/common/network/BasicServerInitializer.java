@@ -4,7 +4,11 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.ssl.SslContext;
@@ -27,12 +31,13 @@ public class BasicServerInitializer extends ChannelInitializer<SocketChannel> {
         if (this.sslCtx != null) {
             pipeline.addLast(sslCtx.newHandler(ch.alloc()));
         }
-        pipeline.addLast(
-            new LineBasedFrameDecoder(1024),
-            new StringDecoder(StandardCharsets.UTF_8),
-            new StringEncoder(StandardCharsets.UTF_8),
-            this.handler
+        pipeline.addLast("frameDecoder",
+            new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4)
         );
+        pipeline.addLast("decoder", new ByteArrayDecoder());
+        pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+        pipeline.addLast("bytesEncoder", new ByteArrayEncoder());
+        pipeline.addLast(this.handler);
     }
 
 }

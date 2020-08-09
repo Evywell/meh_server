@@ -8,7 +8,7 @@ import fr.evywell.common.network.Session;
 import fr.evywell.robgame.Service;
 import fr.evywell.common.opcode.Handler;
 import fr.evywell.common.opcode.OpcodeHandler;
-import fr.evywell.robgame.game.gameobject.Player;
+import fr.evywell.robgame.game.entities.Player;
 import io.netty.channel.Channel;
 
 import java.util.ArrayList;
@@ -18,10 +18,11 @@ import java.util.List;
 public class WorldSession extends Session {
 
     private boolean authenticated;
-    private List<PrePacket> queue;
+    private List<Packet> queue;
     private OpcodeHandler handler;
-    private String userUUID;
+    private String userGuid;
     private Player player;
+    private long latency = 0;
 
     public WorldSession(Server server, Channel channel) {
         super(server, channel);
@@ -32,16 +33,15 @@ public class WorldSession extends Session {
 
     public void update(int delta) {
         // Récupération d'un packet dans la queue
-        Packet pck = new Packet();
         while (this.isSocketOpen() && this.queue.iterator().hasNext()) {
-            PrePacket prepck = this.queue.iterator().next();
-            this.queue.remove(prepck);
+            Packet pck = this.queue.iterator().next();
+            this.queue.remove(pck);
             // Gestion de son Opcode (_cmd)
             try {
-                Handler handler = this.handler.getHandler(prepck.getOpcode());
-                Log.info("Traitement du packet avec l'OPCODE " + prepck.getOpcode() + " queue: " + this.queue.size());
+                Handler handler = this.handler.getHandler(pck.getOpcode());
+                Log.info("Traitement du packet avec l'OPCODE " + pck.getOpcode() + " queue: " + this.queue.size());
 
-                handler.call(this, prepck.getPayload().read(handler.getPayloadTemplate()), pck);
+                handler.call(this, handler.getPayload(pck), pck);
             } catch (Exception e) {
                 // Il n'y a pas d'handler lié à cet OPCODE
                 e.printStackTrace();
@@ -57,16 +57,16 @@ public class WorldSession extends Session {
         this.authenticated = flag;
     }
 
-    public void pushInQueue(PrePacket pck) {
+    public void pushInQueue(Packet pck) {
         this.queue.add(pck);
     }
 
-    public String getUserUUID() {
-        return this.userUUID;
+    public String getUserGuid() {
+        return this.userGuid;
     }
 
-    public void setUserUUID(String userUUID) {
-        this.userUUID = userUUID;
+    public void setUserGuid(String userGuid) {
+        this.userGuid = userGuid;
     }
 
     @Override
@@ -82,5 +82,17 @@ public class WorldSession extends Session {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public void setLatency(long clientLatency) {
+        if (clientLatency > 0) {
+            latency = clientLatency;
+        } else {
+            latency = 0;
+        }
+    }
+
+    public long getLatency() {
+        return latency;
     }
 }

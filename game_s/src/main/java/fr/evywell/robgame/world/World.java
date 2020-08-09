@@ -5,15 +5,11 @@ import fr.evywell.common.container.Container;
 import fr.evywell.common.container.Service;
 import fr.evywell.common.database.Database;
 import fr.evywell.common.logger.Log;
-import fr.evywell.common.maths.Vector3;
 import fr.evywell.common.network.Packet;
-import fr.evywell.common.network.Session;
 import fr.evywell.robgame.config.RealmConfig;
-import fr.evywell.robgame.game.gameobject.CreatureManager;
-import fr.evywell.robgame.game.gameobject.GameObject;
-import fr.evywell.robgame.game.gameobject.GameObjectInfoPacket;
-import fr.evywell.robgame.game.gameobject.Player;
+import fr.evywell.robgame.game.entities.*;
 import fr.evywell.robgame.game.map.MapManager;
+import fr.evywell.robgame.game.spell.SpellManager;
 import fr.evywell.robgame.network.WorldSession;
 import fr.evywell.robgame.opcode.OpcodeHandler;
 import fr.evywell.robgame.time.Clock;
@@ -35,6 +31,7 @@ public class World {
 
     private Database worldDb;
     private MapManager mapManager;
+    private SpellManager spellManager;
     private CreatureManager creatureManager;
 
     // TIMERS
@@ -46,18 +43,19 @@ public class World {
         this.time = new WorldTime();
         this.sessions = new CopyOnWriteArrayList<>();
         this.playersQueue = new HashMap<>();
+        this.worldDb = (Database) Container.getInstance(Service.SERVICE_DATABASE_WORLD);
 
         // Définition des timers
         this.timers = new HashMap<>();
         this.timers.put(UPTIME_TIMER, new Clock(60000)); // 60 secondes
         this.mapManager = new MapManager();
         this.creatureManager = new CreatureManager();
+        this.spellManager = new SpellManager(worldDb);
 
         Container.setInstance(fr.evywell.robgame.Service.CREATURE_MANAGER, this.creatureManager);
     }
 
     public void start() {
-        this.worldDb = (Database) Container.getInstance(Service.SERVICE_DATABASE_WORLD);
         Container.setInstance(fr.evywell.robgame.Service.OPCODE_HANDLER, new OpcodeHandler());
         this._initializeAndReset();
     }
@@ -90,6 +88,7 @@ public class World {
             fr.evywell.robgame.game.map.Map map = mapManager.getMap(player.mapId);
             Log.info("Add player to map");
             map.addPlayerToMap(player);
+            Log.debug(String.format("Adding player %s at positions X=%f Y=%f Z=%f", player.name, player.pos_x, player.pos_y, player.pos_z));
             // On notifie tous les joueurs autour
             player.sendPacketToSet(new NewCharacterInWorldPacket(player), player);
 
@@ -139,6 +138,7 @@ public class World {
         this.mapManager.initializeCachedMaps();
         this.creatureManager.initializeCachedCreatures();
         try {
+            this.spellManager.loadFromDb();
             this.mapManager.createMap(1);
         } catch (Exception e) {
             e.printStackTrace();

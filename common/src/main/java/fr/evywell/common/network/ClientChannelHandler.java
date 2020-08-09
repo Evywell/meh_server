@@ -1,5 +1,7 @@
 package fr.evywell.common.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -19,7 +21,7 @@ public class ClientChannelHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        responseFuture.set((String) msg);
+        responseFuture.set(Unpooled.copiedBuffer((byte[])msg));
         //ctx.close();
     }
 

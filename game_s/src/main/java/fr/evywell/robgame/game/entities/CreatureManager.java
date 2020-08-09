@@ -1,4 +1,4 @@
-package fr.evywell.robgame.game.gameobject;
+package fr.evywell.robgame.game.entities;
 
 import fr.evywell.common.container.Container;
 import fr.evywell.common.container.Service;

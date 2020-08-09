@@ -5,7 +5,7 @@ import fr.evywell.common.container.Container;
 import fr.evywell.common.logger.Log;
 import fr.evywell.robgame.Service;
 import fr.evywell.robgame.config.VMapConfig;
-import fr.evywell.robgame.game.gameobject.Unit;
+import fr.evywell.robgame.game.entities.Unit;
 
 import java.io.*;
 import java.util.ArrayList;

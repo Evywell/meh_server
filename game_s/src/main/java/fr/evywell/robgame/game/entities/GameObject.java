@@ -1,4 +1,4 @@
-package fr.evywell.robgame.game.gameobject;
+package fr.evywell.robgame.game.entities;
 
 import fr.evywell.common.maths.Vector3;
 import fr.evywell.common.network.Packet;
@@ -15,7 +15,7 @@ public class GameObject {
     protected Map map;
     protected Cell cell;
 
-    public String uuid;
+    public ObjectGuid guid;
     public int mapId;
     public float pos_x, pos_y, pos_z, orientation;
 
@@ -65,7 +65,7 @@ public class GameObject {
     @Override
     public String toString() {
         return "{" +
-                "uuid='" + uuid + '\'' +
+                "guid='" + guid + '\'' +
                 ", mapId=" + mapId +
                 ", pos_x=" + pos_x +
                 ", pos_y=" + pos_y +
@@ -80,7 +80,7 @@ public class GameObject {
 
     public java.util.Map<String, Object> toMap() {
         java.util.Map<String, Object> go = new HashMap<>();
-        go.put("uuid", uuid);
+        go.put("guid", guid.getGuid());
         go.put("map_id", mapId);
         go.put("pos_x", pos_x);
         go.put("pos_y", pos_y);
@@ -89,6 +89,16 @@ public class GameObject {
         go.put("type", getType());
 
         return go;
+    }
+
+    public void putIntoPacket(Packet src) {
+        src.putLong(guid.getGuid());
+        src.putInt(mapId);
+        src.putFloat(pos_x);
+        src.putFloat(pos_y);
+        src.putFloat(pos_z);
+        src.putFloat(orientation);
+        src.putInt(getType());
     }
 
 }

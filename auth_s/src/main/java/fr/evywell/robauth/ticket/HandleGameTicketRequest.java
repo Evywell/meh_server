@@ -50,14 +50,14 @@ public class HandleGameTicketRequest {
         Date date = new Date();
         Timestamp timestamp = new Timestamp(date.getTime());
         String passphrase = this.encryption.encryptFromSecret(
-            session.getUuid() + ":" + session.getToken() + ":" + timestamp.getTime(),
+            session.getGuid() + ":" + session.getToken() + ":" + timestamp.getTime(),
             secret
         );
 
-        Packet pck = new Packet();
-        pck.setCmd(AUTH_GAME_TICKET_SUCCEED);
-        pck.add("ticket", passphrase);
+        Packet pck = new Packet(AUTH_GAME_TICKET_SUCCEED);
+        pck.putString(passphrase);
         session.send(pck);
+        Log.info("AUTH_GAME_TICKET ended");
     }
 
     private String getSecretFromGameCode(String gameCode) {

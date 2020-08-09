@@ -1,10 +1,13 @@
 package fr.evywell.robgame.world.character;
 
-import com.jsoniter.annotation.JsonProperty;
-
 public class InvokeCharacterInWorldPayload {
 
-    @JsonProperty(required = true)
-    public String character_uuid;
+    public int character_uuid;
+
+    public InvokeCharacterInWorldPayload() {}
+
+    public InvokeCharacterInWorldPayload(int character_uuid) {
+        this.character_uuid = character_uuid;
+    }
 
 }

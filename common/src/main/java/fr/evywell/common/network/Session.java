@@ -32,8 +32,7 @@ public class Session {
     }
 
     public void send(Packet packet) {
-        String pck = packet.toJson();
-        this.channel.writeAndFlush(pck);
+        this.channel.writeAndFlush(packet.getBytes());
     }
 
     public Channel channel() {

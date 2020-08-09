@@ -5,5 +5,6 @@ public class Service {
         OPCODE_HANDLER = 100,
         CREATURE_MANAGER = 101,
         WORLD = 102,
-        CONFIG = 103;
+        CONFIG = 103,
+        SPELL_MANAGER = 104;
 }

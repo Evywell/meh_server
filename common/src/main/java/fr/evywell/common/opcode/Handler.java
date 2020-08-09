@@ -6,6 +6,6 @@ import fr.evywell.common.network.Session;
 public interface Handler {
 
     void call(Session session, Object payload, Packet packet);
-    Class getPayloadTemplate();
+    Object getPayload(Packet packet);
 
 }

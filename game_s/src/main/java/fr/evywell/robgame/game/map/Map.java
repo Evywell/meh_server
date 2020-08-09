@@ -6,13 +6,14 @@ import fr.evywell.common.database.Database;
 import fr.evywell.common.database.PreparedStatement;
 import fr.evywell.common.logger.Log;
 import fr.evywell.robgame.database.WorldQuery;
-import fr.evywell.robgame.game.gameobject.*;
+import fr.evywell.robgame.game.entities.*;
 import fr.evywell.robgame.game.map.grid.Cell;
 import fr.evywell.robgame.game.map.grid.Grid;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Map {
@@ -25,7 +26,9 @@ public class Map {
     protected Grid grid;
     protected VirtualMap vmap;
 
-    protected List<GameObject> go;
+    protected java.util.Map<Integer, Player> players;
+    protected java.util.Map<Integer, Unit> creatures;
+    protected java.util.Map<Integer, GameObject> gos;
 
     protected CreatureManager creatureManager;
 
@@ -38,19 +41,50 @@ public class Map {
         this.width = width;
         this.height = height;
         this.creatureManager = (CreatureManager) Container.getInstance(fr.evywell.robgame.Service.CREATURE_MANAGER);
-        this.go = new ArrayList<>();
+        this.players = new HashMap<>();
+        this.creatures = new HashMap<>();
+        this.gos = new HashMap<>();
     }
 
     public void update(int delta) {
-        for (GameObject go : this.go) {
+        for (GameObject go : this.players.values()) {
+            go.update(delta);
+        }
+        for (GameObject go : this.creatures.values()) {
+            go.update(delta);
+        }
+        for (GameObject go : this.gos.values()) {
             go.update(delta);
         }
     }
 
     public void addToMap(GameObject go) {
-        this.go.add(go);
+        switch (go.guid.getType()) {
+            case ObjectGuid.PLAYER:
+                players.put(go.guid.getUuid(), (Player) go);
+                break;
+            case ObjectGuid.CREATURE:
+                creatures.put(go.guid.getUuid(), (Unit) go);
+                break;
+            case ObjectGuid.GAME_OBJECT:
+                gos.put(go.guid.getUuid(), go);
+                break;
+        }
         grid.addToGrid(go);
         go.setMap(this);
+    }
+
+    public GameObject findGameObject(ObjectGuid guid) {
+        int uuid = guid.getUuid();
+        switch (guid.getType()) {
+            case ObjectGuid.PLAYER:
+                return players.getOrDefault(uuid, null);
+            case ObjectGuid.CREATURE:
+                return creatures.getOrDefault(uuid, null);
+            case ObjectGuid.GAME_OBJECT:
+                return gos.getOrDefault(uuid, null);
+        }
+        return null;
     }
 
     public GameObject[] getGameObjectsInAreaOf(GameObject go) {
@@ -114,7 +148,7 @@ public class Map {
                 c = new Creature();
                 c.mapId = mapId;
                 c.name = t.name;
-                c.uuid = rs.getString(1);
+                c.guid = ObjectGuid.createCreature(rs.getInt(1));
                 c.pos_x = rs.getFloat(3);
                 c.pos_y = rs.getFloat(4);
                 c.pos_z = rs.getFloat(5);

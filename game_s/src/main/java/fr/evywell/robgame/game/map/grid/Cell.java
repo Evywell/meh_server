@@ -1,6 +1,6 @@
 package fr.evywell.robgame.game.map.grid;
 
-import fr.evywell.robgame.game.gameobject.GameObject;
+import fr.evywell.robgame.game.entities.GameObject;
 import fr.evywell.robgame.game.map.grid.notifier.AbstractDeliverVisitor;
 import fr.evywell.robgame.game.map.grid.notifier.GridNotifier;
 

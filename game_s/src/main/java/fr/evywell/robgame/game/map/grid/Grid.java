@@ -1,9 +1,10 @@
 package fr.evywell.robgame.game.map.grid;
 
 import fr.evywell.common.maths.Vector3;
-import fr.evywell.robgame.game.gameobject.GameObject;
-import fr.evywell.robgame.game.gameobject.Player;
-import fr.evywell.robgame.game.gameobject.Unit;
+import fr.evywell.robgame.game.entities.GameObject;
+import fr.evywell.robgame.game.entities.ObjectGuid;
+import fr.evywell.robgame.game.entities.Player;
+import fr.evywell.robgame.game.entities.Unit;
 import fr.evywell.robgame.game.map.grid.notifier.AbstractDeliverVisitor;
 import fr.evywell.robgame.game.map.grid.notifier.GridNotifier;
 

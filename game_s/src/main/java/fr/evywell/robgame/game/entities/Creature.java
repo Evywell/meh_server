@@ -1,6 +1,5 @@
-package fr.evywell.robgame.game.gameobject;
+package fr.evywell.robgame.game.entities;
 
-import fr.evywell.common.logger.Log;
 import fr.evywell.common.timer.IntervalTimer;
 
 import java.util.Map;

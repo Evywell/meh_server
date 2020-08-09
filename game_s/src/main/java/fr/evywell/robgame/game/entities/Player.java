@@ -1,17 +1,13 @@
-package fr.evywell.robgame.game.gameobject;
+package fr.evywell.robgame.game.entities;
 
 import fr.evywell.common.maths.Vector3;
 import fr.evywell.common.network.Packet;
 import fr.evywell.common.timer.IntervalTimer;
 import fr.evywell.robgame.game.movement.MovementInfo;
-import fr.evywell.robgame.game.movement.MovementPayload;
 import fr.evywell.robgame.network.WorldSession;
 import fr.evywell.robgame.opcode.Opcode;
 import fr.evywell.robgame.world.WorldTime;
 import static fr.evywell.robgame.game.movement.MovementType.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Player extends Unit {
 
@@ -25,15 +21,16 @@ public class Player extends Unit {
     }
 
     public void sendGameObjectUpdate(GameObject go) {
-        Packet pck = new Packet();
-        pck.setCmd(Opcode.SMSG_NOTIFY_PLAYER_GAME_OBJECT_STATE);
-        pck.add("uuid", go.uuid);
-        pck.add("map_id", go.mapId);
-        pck.add("pos_x", go.pos_x);
-        pck.add("pos_y", go.pos_y);
-        pck.add("pos_z", go.pos_z);
-        pck.add("orientation", go.orientation);
+        /*
+        Packet pck = new Packet(Opcode.SMSG_NOTIFY_PLAYER_GAME_OBJECT_STATE);
+        pck.putInt(go.uuid);
+        pck.putInt(go.mapId);
+        pck.putFloat(go.pos_x);
+        pck.putFloat(go.pos_y);
+        pck.putFloat(go.pos_z);
+        pck.putFloat( go.orientation);
         session.send(pck);
+         */
         //Log.info(String.format("Le joueur %s a reçu un message de la créature %s !", this.hashCode(), go.uuid));
     }
 
@@ -46,9 +43,7 @@ public class Player extends Unit {
         super.update(delta);
         timer.update(delta);
         if (timer.passed()) {
-            Packet pck = new Packet();
-            pck.setCmd(4354354);
-            //session.send(pck);
+
             timer.reset();
         }
     }

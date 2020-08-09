@@ -64,7 +64,7 @@ public class AuthenticationChallenge {
             session.send(this.getErrorInTicketPacket());
             return;
         }
-        String uuid = ticketParts[0];
+        String guid = ticketParts[0];
         String token = ticketParts[1];
         String timestamp = ticketParts[2];
 
@@ -77,28 +77,31 @@ public class AuthenticationChallenge {
         // Récupération des personnages du compte
         PreparedStatement stmtAccountCharacters = chardb.createPreparedStatement(SEL_CHARACTERS_BY_USER);
         try {
-            stmtAccountCharacters.setString(1, uuid);
+            stmtAccountCharacters.setString(1, guid);
             stmtAccountCharacters.execute();
 
             ResultSet rs = stmtAccountCharacters.getResultSet();
             List<Character> characters = new ArrayList<>();
+
             while (rs.next()) {
                 // On parcours les personnages
                 Character c = new Character();
-                c.uuid = rs.getString(1);
+                c.uuid = rs.getInt(1);
                 c.name = rs.getString(2);
                 characters.add(c); // Mon IDE me met une erreur ici, mais ça passe
             }
 
             session.setAuthenticated(true);
-            session.setUserUUID(uuid);
+            session.setUserGuid(guid);
 
-            Packet pck = new Packet();
-            pck.setCmd(SMSG_ACCOUNT_CHARACTER_LIST);
-            pck.add("num_characters", characters.size());
-            pck.add("characters", characters);
+            Packet pck = new Packet(SMSG_ACCOUNT_CHARACTER_LIST);
+            pck.putInt(characters.size());
+            for (Character character : characters) {
+                pck.putInt(character.uuid);
+                pck.putString(character.name);
+            }
             session.send(pck);
-            Log.info(String.format("Utilisateur <%s> authentifié avec succès", uuid));
+            Log.info(String.format("Utilisateur <%s> authentifié avec succès", guid));
             world.addSession(session);
         } catch (SQLException e) {
             e.printStackTrace();

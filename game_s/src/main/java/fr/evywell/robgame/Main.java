@@ -7,12 +7,15 @@ import fr.evywell.common.database.Database;
 import fr.evywell.common.logger.Log;
 import fr.evywell.common.network.AuthClient;
 import fr.evywell.common.network.BasicServerInitializer;
+import fr.evywell.common.network.Packet;
 import fr.evywell.common.network.RequestFoundation;
 import fr.evywell.robgame.authentication.ClientTram;
 import fr.evywell.robgame.config.*;
+import fr.evywell.robgame.game.entities.ObjectGuid;
 import fr.evywell.robgame.network.GameServerHandler;
 import fr.evywell.robgame.network.WorldServer;
 import fr.evywell.robgame.world.World;
+import io.netty.buffer.ByteBuf;
 
 import java.io.File;
 
@@ -57,16 +60,28 @@ public class Main {
         Log.info("Récupération de la clé secret auprès du serveur d'authentification...");
         AuthConfig authConfig = (AuthConfig) config.get("auth");
         AuthClient client = new AuthClient(authConfig.ip, authConfig.port);
+        Packet pck = new Packet(1);
+        pck.putString("a_client_id");
         client.setClientId(authConfig.clientId);
         try {
             client.connect();
-            RequestFoundation rq = RequestFoundation.fromString(client.sendClientIdRequest("a_client_id").get());
-            ClientTram tram = rq.getBody().read(ClientTram.class);
-            server.setSecret(tram.secret);
+            ByteBuf buffer = client.sendClientIdRequest(pck).get();
+            byte[] bytes;
+            int length = buffer.readableBytes();
+
+            if (buffer.hasArray()) {
+                bytes = buffer.array();
+            } else {
+                bytes = new byte[length];
+                buffer.getBytes(buffer.readerIndex(), bytes);
+            }
+            Packet packet = new Packet(bytes);
+            server.setSecret(packet.readString());
             Log.info("Clé secret ajoutée au serveur");
             client.close();
         } catch (Exception e) {
             Log.error("Impossible de contacter le serveur d'authentification pour récupérer la clé secret");
+            e.printStackTrace();
             System.out.println(e.toString());
         }
     }

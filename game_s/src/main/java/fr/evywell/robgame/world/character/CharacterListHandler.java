@@ -28,7 +28,7 @@ public class CharacterListHandler implements Handler {
             while (rs.next()) {
                 // On parcours les personnages
                 Character c = new Character();
-                c.guid = rs.getString(1);
+                c.guuid = rs.getString(1);
                 c.name = rs.getString(2);
                 characters.add(c); // Mon IDE me met une erreur ici, mais ça passe
             }
@@ -44,7 +44,8 @@ public class CharacterListHandler implements Handler {
     }
 
     @Override
-    public Class getPayloadTemplate() {
-        return CharacterListPayload.class;
+    public Object getPayload(Packet packet) {
+        return null;
     }
+
 }
