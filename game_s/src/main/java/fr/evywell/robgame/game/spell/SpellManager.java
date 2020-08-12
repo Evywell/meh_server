@@ -22,6 +22,7 @@ public class SpellManager {
     private Map<Integer, String> effectRegistry;
     private Map<Integer, SpellInfo> spellRegistry;
     private Map<Integer, AuraInfo> auraRegistry;
+    private Map<Integer, List<String>> spellScriptRegistry;
     private Database worldDb;
 
     public SpellManager(Database worldDb) {
@@ -29,6 +30,7 @@ public class SpellManager {
         this.effectRegistry = new HashMap<>();
         this.spellRegistry = new HashMap<>();
         this.auraRegistry = new HashMap<>();
+        this.spellScriptRegistry = new HashMap<>();
         this.loadEffects();
     }
 
@@ -45,6 +47,20 @@ public class SpellManager {
         this.loadSpellsFromDb();
         // Chargement des auras
         this.loadAurasFromDb();
+    }
+
+    public void loadScriptsFromDb() throws SQLException {
+        Statement stmt = worldDb.executeStatement(WorldQuery.SEL_SPELLS_SCRIPTS);
+        ResultSet rs = stmt.getResultSet();
+        while (rs.next()) {
+            int spellId = rs.getInt(1);
+            if (!hasSpell(spellId)) continue;
+            String scriptName = rs.getString(2);
+            if (!spellScriptRegistry.containsKey(spellId)) {
+                spellScriptRegistry.put(spellId, new ArrayList<>());
+            }
+            spellScriptRegistry.get(spellId).add(scriptName);
+        }
     }
 
     private void loadAurasFromDb() throws SQLException {
@@ -124,6 +140,7 @@ public class SpellManager {
             EffectInfo effectInfo = new EffectInfo(effectID);
             effectInfo.value1 = rs.getInt(4);
             effectInfo.value2 = rs.getInt(5);
+            effectInfo.targetMask = rs.getInt(6);
             effectInfos.add(effectInfo);
         }
 

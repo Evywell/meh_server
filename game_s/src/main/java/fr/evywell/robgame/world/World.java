@@ -139,6 +139,7 @@ public class World {
         this.creatureManager.initializeCachedCreatures();
         try {
             this.spellManager.loadFromDb();
+            this.spellManager.loadScriptsFromDb();
             this.mapManager.createMap(1);
         } catch (Exception e) {
             e.printStackTrace();

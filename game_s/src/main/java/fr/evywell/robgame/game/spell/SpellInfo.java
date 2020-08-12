@@ -9,7 +9,7 @@ public class SpellInfo {
     public byte resourceType;
     public float cooldown;
     public int range;
-    public float castTime;
+    public int castTime;
     public float gcd;
     public int gcdCategory;
     public float duration;
@@ -26,5 +26,9 @@ public class SpellInfo {
 
     public void setEffects(EffectInfo[] effects) {
         this.effects = effects;
+    }
+
+    public EffectInfo[] getEffects() {
+        return effects;
     }
 }
