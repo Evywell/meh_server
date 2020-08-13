@@ -22,7 +22,7 @@ CREATE TABLE `creatures` (
 -- Déchargement des données de la table `creatures`
 --
 
-INSERT INTO `creatures` (`uuid`, `creature_template_uuid`, `map_id`, `pos_x`, `pos_y`, `pos_z`, `orientation`) VALUES
+INSERT INTO `creatures` (`uuid`, `creature_template_id`, `map_id`, `pos_x`, `pos_y`, `pos_z`, `orientation`) VALUES
 (1, 1, 1, 2, 0, 1, 0),
 (2, 1, 1, 0, 0, 0, 0),
 (3, 2, 1, 2, 0, 2, 0);
@@ -34,7 +34,7 @@ INSERT INTO `creatures` (`uuid`, `creature_template_uuid`, `map_id`, `pos_x`, `p
 --
 
 CREATE TABLE `creatures_templates` (
-  `id` int(11) AUTO_INCREMENT,
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -70,18 +70,6 @@ INSERT INTO `creatures_templates_locales` (`creature_template_id`, `locale`, `na
 --
 -- Index pour les tables déchargées
 --
-
---
--- Index pour la table `creatures`
---
-ALTER TABLE `creatures`
-  ADD PRIMARY KEY (`uuid`);
-
---
--- Index pour la table `creatures_templates`
---
-ALTER TABLE `creatures_templates`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `creatures_templates_locales`

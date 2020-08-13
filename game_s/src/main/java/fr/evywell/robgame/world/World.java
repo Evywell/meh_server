@@ -43,20 +43,19 @@ public class World {
         this.time = new WorldTime();
         this.sessions = new CopyOnWriteArrayList<>();
         this.playersQueue = new HashMap<>();
-        this.worldDb = (Database) Container.getInstance(Service.SERVICE_DATABASE_WORLD);
 
         // Définition des timers
         this.timers = new HashMap<>();
         this.timers.put(UPTIME_TIMER, new Clock(60000)); // 60 secondes
         this.mapManager = new MapManager();
         this.creatureManager = new CreatureManager();
-        this.spellManager = new SpellManager(worldDb);
 
         Container.setInstance(fr.evywell.robgame.Service.CREATURE_MANAGER, this.creatureManager);
     }
 
     public void start() {
         Container.setInstance(fr.evywell.robgame.Service.OPCODE_HANDLER, new OpcodeHandler());
+        this.worldDb = (Database) Container.getInstance(Service.SERVICE_DATABASE_WORLD);
         this._initializeAndReset();
     }
 
@@ -135,6 +134,7 @@ public class World {
     }
 
     private void _initializeAndReset() {
+        this.spellManager = new SpellManager(worldDb);
         this.mapManager.initializeCachedMaps();
         this.creatureManager.initializeCachedCreatures();
         try {

@@ -7,10 +7,10 @@ public class SpellInfo {
     public String description;
     public int cost;
     public byte resourceType;
-    public float cooldown;
+    public int cooldown;
     public int range;
     public int castTime;
-    public float gcd;
+    public int gcd;
     public int gcdCategory;
     public float duration;
     public byte school;

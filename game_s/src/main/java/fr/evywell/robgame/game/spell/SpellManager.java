@@ -4,7 +4,6 @@ import fr.evywell.common.database.Database;
 import fr.evywell.common.database.PreparedStatement;
 import fr.evywell.common.logger.Log;
 import fr.evywell.robgame.database.WorldQuery;
-import fr.evywell.robgame.world.World;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -111,10 +110,10 @@ public class SpellManager {
             spellInfo.description = rs.getString(3);
             spellInfo.cost = rs.getInt(4);
             spellInfo.resourceType = rs.getByte(5);
-            spellInfo.cooldown = rs.getFloat(6);
+            spellInfo.cooldown = rs.getInt(6);
             spellInfo.range = rs.getInt(7);
-            spellInfo.castTime = rs.getFloat(8);
-            spellInfo.gcd = rs.getFloat(9);
+            spellInfo.castTime = rs.getInt(8);
+            spellInfo.gcd = rs.getInt(9);
             spellInfo.gcdCategory = rs.getInt(10);
             spellInfo.duration = rs.getFloat(11);
             spellInfo.school = rs.getByte(12);

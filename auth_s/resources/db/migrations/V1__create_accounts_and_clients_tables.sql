@@ -1,5 +1,5 @@
 CREATE TABLE accounts (
-    uuid INT PRIMARY KEY AUTO_INCREMENT,
+    guid varchar(255) PRIMARY KEY,
     username VARCHAR(65) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE accounts (
     date_ban_end DATETIME,
     last_logged_in DATETIME,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
