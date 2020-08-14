@@ -13,6 +13,7 @@ public class Window {
     private String title;
     private JFrame mainFrame;
     private JPanel panel;
+    private TextArea textArea;
 
     public Window(String title, int width, int height) {
         this.width = width;
@@ -41,6 +42,10 @@ public class Window {
         return this.mainFrame;
     }
 
+    public TextArea getTextArea() {
+        return textArea;
+    }
+
     private void initWindow() {
         JFrame frame = new JFrame(this.title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,6 +53,9 @@ public class Window {
         panel = new JPanel();
         panel.setBackground(Color.WHITE);
         panel.setPreferredSize(new Dimension(width, height));
+        panel.setLayout(new BorderLayout());
+        textArea = new TextArea();
+        panel.add(textArea, BorderLayout.EAST);
         frame.add(panel);
         frame.pack();
         this.mainFrame = frame;

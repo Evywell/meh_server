@@ -18,6 +18,7 @@ public class InvokeCharacterInWorldHandler implements Handler {
 
     @Override
     public void call(Session session, Object payload, Packet packet) {
+        /*
         InvokeCharacterInWorldTram tram = (InvokeCharacterInWorldTram) payload;
         Player player = new Player();
         player.name = (String) tram.player.get("name");
@@ -35,10 +36,11 @@ public class InvokeCharacterInWorldHandler implements Handler {
         Game game = app.createGame();
         game.setPlayer(player);
         game.buildWorld();
+        */
     }
 
     @Override
-    public Class getPayloadTemplate() {
-        return InvokeCharacterInWorldTram.class;
+    public Object getPayload(Packet packet) {
+        return null;
     }
 }

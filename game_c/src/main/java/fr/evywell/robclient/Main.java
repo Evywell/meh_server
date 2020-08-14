@@ -9,6 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         Application app = new Application();
+        app.launch();
         //Window window = new Window("Test");
         //window.show();
     }

@@ -20,7 +20,8 @@ public class InvokeCharacterClientReadyHandler implements Handler {
     }
 
     @Override
-    public Class getPayloadTemplate() {
-        return EmptyTram.class;
+    public Object getPayload(Packet packet) {
+        return null;
     }
+
 }

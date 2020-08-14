@@ -1,10 +1,13 @@
 package fr.evywell.robclient;
 
 import fr.evywell.robclient.display.Window;
+import fr.evywell.robclient.display.components.HistoryComponent;
 import fr.evywell.robclient.game.Game;
 import fr.evywell.robclient.network.GameServerClient;
 import fr.evywell.robclient.opcode.AuthOpcodeHandler;
 import fr.evywell.robclient.opcode.GameOpcodeHandler;
+
+import java.awt.*;
 
 public class Application {
 
@@ -16,14 +19,19 @@ public class Application {
     private Window mainWindow;
 
     public Application() {
-        authClient = new GameServerClient("127.0.0.1", 8888, new AuthOpcodeHandler(this));
-        gameClient = new GameServerClient("127.0.0.1", 1337, new GameOpcodeHandler(this));
+        authClient = new GameServerClient("127.0.0.1", 8888, new AuthOpcodeHandler(this), this);
+        gameClient = new GameServerClient("127.0.0.1", 1337, new GameOpcodeHandler(this), this);
         try {
             authClient.connect();
             authClient.sendLoginPacket("admin", "admin");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void launch() {
+        Window w = createMainWindow();
+        w.show();
     }
 
     public Game createGame() {

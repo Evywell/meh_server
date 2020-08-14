@@ -22,21 +22,20 @@ public class LoginHandler implements Handler {
     @Override
     public void call(Session session, Object payload, Packet packet) {
         if (!isLoginSucceed) {
-            Log.error(((LoginTramError) payload).message);
-            JOptionPane.showMessageDialog(null, ((LoginTramError) payload).message, "Erreur d'authentification", JOptionPane.ERROR_MESSAGE);
+            String message = packet.readString();
+            Log.error(message);
+            JOptionPane.showMessageDialog(null, message, "Erreur d'authentification", JOptionPane.ERROR_MESSAGE);
             return;
         }
         // On demande un ticket pour jouer au jeu
-        String token = ((LoginTramSuccess)payload).token;
+        String token = packet.readString();
         app.setToken(token);
         app.getAuthClient().sendObtainTicket(token);
     }
 
     @Override
-    public Class getPayloadTemplate() {
-        if (isLoginSucceed) {
-            return LoginTramSuccess.class;
-        }
-        return LoginTramError.class;
+    public Object getPayload(Packet packet) {
+        return null;
     }
+
 }
