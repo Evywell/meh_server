@@ -6,13 +6,13 @@ import fr.evywell.robgame.opcode.Opcode;
 public class MovementUpdate extends Packet {
 
     public MovementUpdate(MovementInfo movement) {
-        this.setCmd(Opcode.SMSG_MOVE_UPDATE);
-        this.add("uuid", movement.uuid);
-        this.add("posX", movement.position.x);
-        this.add("posY", movement.position.y);
-        this.add("posZ", movement.position.z);
-        this.add("orientation", movement.orientation);
-        this.add("flags", movement.flags);
+        super(Opcode.SMSG_MOVE_UPDATE);
+        this.putLong(movement.guid.getGuid());
+        this.putFloat(movement.position.x);
+        this.putFloat(movement.position.y);
+        this.putFloat(movement.position.z);
+        this.putFloat(movement.orientation);
+        this.putInt(movement.flags);
     }
 
 }

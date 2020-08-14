@@ -102,7 +102,7 @@ public abstract class Server {
         return new ArrayList<Session>(this.sessions.values());
     }
 
-    public abstract void dispatch(int _cmd, JsonIterator iterator, Session session) throws MalformedRequestException;
+    public abstract void dispatch(int _cmd, Packet packet, Session session) throws MalformedRequestException;
 
     public void handle(ChannelHandler handler) {
         this.bootstrap.childHandler(handler);

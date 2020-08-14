@@ -1,5 +1,7 @@
 package fr.evywell.common.network;
 
+import fr.evywell.common.logger.Log;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -12,14 +14,14 @@ public class AuthClient extends Client {
         super(ip, port);
     }
 
-    public ClientResponseFuture sendClientIdRequest(String clientId) {
+    public ClientResponseFuture sendClientIdRequest(Packet packet) {
         final ClientResponseFuture responseFuture = new ClientResponseFuture();
 
         channel.addListener(new GenericFutureListener<ChannelFuture>() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 channel.channel().pipeline().get(ClientChannelHandler.class).setResponseFuture(responseFuture);
-                channel.channel().writeAndFlush(String.format("[1,{\"client_id\":\"%s\"}]" + System.lineSeparator(), clientId));
+                channel.channel().writeAndFlush(Unpooled.wrappedBuffer(packet.getBytes()));
             }
         });
 

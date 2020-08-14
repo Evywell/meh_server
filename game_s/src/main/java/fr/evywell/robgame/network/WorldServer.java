@@ -3,6 +3,7 @@ package fr.evywell.robgame.network;
 import com.jsoniter.JsonIterator;
 import fr.evywell.common.logger.Log;
 import fr.evywell.common.network.MalformedRequestException;
+import fr.evywell.common.network.Packet;
 import fr.evywell.common.network.Server;
 import fr.evywell.common.network.Session;
 import fr.evywell.robgame.Main;
@@ -74,7 +75,7 @@ public class WorldServer extends Server {
     }
 
     @Override
-    public void dispatch(int _cmd, JsonIterator iterator, Session session) throws MalformedRequestException {
+    public void dispatch(int _cmd, Packet packet, Session session) throws MalformedRequestException {
         if (_cmd < 0) {
             throw new MalformedRequestException(String.format("La command %s n'existe pas", _cmd));
         }
@@ -82,14 +83,12 @@ public class WorldServer extends Server {
             session.kick();
         }
         if (_cmd == WORLD_AUTHENTICATION_CHALLENGE) {
-            try {
-                AuthTram tram = iterator.read(AuthTram.class);
-                (new AuthenticationChallenge(tram, ((WorldSession) session), secret, world)).proceed();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            AuthTram tram = new AuthTram();
+            tram.ticket = packet.readString();
+            tram.token = packet.readString();
+            (new AuthenticationChallenge(tram, ((WorldSession) session), secret, world)).proceed();
         } else {
-            ((WorldSession) session).pushInQueue(new PrePacket(_cmd, iterator));
+            ((WorldSession) session).pushInQueue(packet);
         }
     }
 

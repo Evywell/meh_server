@@ -1,8 +1,8 @@
 package fr.evywell.robgame.game.map.grid.notifier;
 
 import fr.evywell.common.network.Packet;
-import fr.evywell.robgame.game.gameobject.GameObject;
-import fr.evywell.robgame.game.gameobject.Player;
+import fr.evywell.robgame.game.entities.GameObject;
+import fr.evywell.robgame.game.entities.Player;
 
 public class PacketDeliverVisitor extends AbstractDeliverVisitor {
 

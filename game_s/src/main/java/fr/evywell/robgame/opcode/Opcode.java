@@ -24,6 +24,7 @@ public class Opcode {
     // MOVING
     public static final int CMSG_MOVE_CHANGE = 0x131; // 305
     public static final int CMSG_MOVE_STOP = 0x132; // 311
+    public static final int CMSG_CAST_SPELL = 0x133;
 
     // SMSG
     public static final int SMSG_ACCOUNT_CHARACTER_LIST = 0xC9;
@@ -33,5 +34,7 @@ public class Opcode {
     public static final int SMSG_NOTIFY_PLAYER_GAME_OBJECT_STATE = 0x130; // 304
     public static final int SMSG_MOVE_UPDATE = 0x131; // 305
     public static final int SMSG_GAME_OBJECT_INFO = 0x132; // 306
+
+    public static final int SMSG_COMBAT_KILL = 0x258; // 600
 
 }

@@ -2,17 +2,10 @@ package fr.evywell.sandbox;
 
 import fr.evywell.common.config.Config;
 import fr.evywell.common.container.Container;
-import fr.evywell.common.logger.Log;
 import fr.evywell.robgame.config.VMapConfigHandler;
-import fr.evywell.robgame.game.gameobject.Unit;
-import fr.evywell.robgame.game.map.Map;
-import fr.evywell.robgame.game.map.VirtualMap;
 import fr.evywell.tools.map_generator.MapGenerator;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Main {
 

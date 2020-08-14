@@ -7,7 +7,7 @@ import static fr.evywell.robgame.opcode.Opcode.WORLD_AUTHENTICATION_CHALLENGE_FA
 public class AuthFailedPacket extends Packet {
 
     public AuthFailedPacket() {
-        this.setCmd(WORLD_AUTHENTICATION_CHALLENGE_FAILED);
+        super(WORLD_AUTHENTICATION_CHALLENGE_FAILED);
     }
 
     public AuthFailedPacket(int code, String message) {
@@ -17,10 +17,10 @@ public class AuthFailedPacket extends Packet {
     }
 
     public void setCode(int code) {
-        this.add("code", code);
+        this.putInt(code);
     }
 
     public void setMessage(String message) {
-        this.add("message", message);
+        this.putString(message);
     }
 }

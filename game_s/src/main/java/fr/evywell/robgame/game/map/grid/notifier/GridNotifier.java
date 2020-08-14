@@ -1,7 +1,7 @@
 package fr.evywell.robgame.game.map.grid.notifier;
 
-import fr.evywell.robgame.game.gameobject.GameObject;
-import fr.evywell.robgame.game.gameobject.Player;
+import fr.evywell.robgame.game.entities.GameObject;
+import fr.evywell.robgame.game.entities.Player;
 import fr.evywell.robgame.game.map.grid.Cell;
 import fr.evywell.robgame.game.map.grid.Grid;
 

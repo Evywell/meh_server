@@ -19,7 +19,7 @@ public class AccountCharacterListHandler implements Handler {
         AccountCharacterListTram tram = (AccountCharacterListTram) payload;
         Log.info(String.format("Tu as (%d) personnages sur ce compte", tram.num_characters));
         for (Character c : tram.characters) {
-            Log.info(String.format("UUID: %s, Name: %s", c.uuid, c.name));
+            Log.info(String.format("uuid: %s, Name: %s", c.uuid, c.name));
         }
         if (!tram.characters.isEmpty()) {
             app.getGameClient().sendInvokeCharacterInWorldPacket(tram.characters.get(0));

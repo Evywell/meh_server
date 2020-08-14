@@ -9,11 +9,9 @@ import fr.evywell.common.network.Packet;
 import fr.evywell.common.network.Session;
 import fr.evywell.common.opcode.Handler;
 import fr.evywell.robgame.database.CharacterQuery;
-import fr.evywell.robgame.game.gameobject.GameObject;
-import fr.evywell.robgame.game.gameobject.GameObjectInfoPacket;
-import fr.evywell.robgame.game.gameobject.Player;
+import fr.evywell.robgame.game.entities.ObjectGuid;
+import fr.evywell.robgame.game.entities.Player;
 import fr.evywell.robgame.network.WorldSession;
-import fr.evywell.robgame.opcode.Opcode;
 import fr.evywell.robgame.world.World;
 
 import java.sql.ResultSet;
@@ -32,11 +30,11 @@ public class InvokeCharacterInWorldHandler implements Handler {
     @Override
     public void call(Session session, Object payload, Packet packet) {
         InvokeCharacterInWorldPayload tram = (InvokeCharacterInWorldPayload) payload;
-        Log.info("Invoke Player un World: " + tram.character_uuid);
-        PreparedStatement stmtCharacter = this.characterDb.getPreparedStatement(CharacterQuery.SEL_CHARACTER_BY_UUID);
+        Log.info("Invoke Player in World: " + tram.character_uuid);
+        PreparedStatement stmtCharacter = this.characterDb.getPreparedStatement(CharacterQuery.SEL_CHARACTER_BY_uuid);
         try {
-            stmtCharacter.setString(1, ((WorldSession) session).getUserUUID());
-            stmtCharacter.setString(2, tram.character_uuid);
+            stmtCharacter.setString(1, ((WorldSession) session).getUserGuid());
+            stmtCharacter.setInt(2, tram.character_uuid);
             stmtCharacter.execute();
 
             ResultSet rs = stmtCharacter.getResultSet();
@@ -45,7 +43,7 @@ public class InvokeCharacterInWorldHandler implements Handler {
                 return;
             }
             Player p = new Player((WorldSession) session);
-            p.uuid = rs.getString(1);
+            p.guid = ObjectGuid.createPlayer(rs.getInt(1));
             p.name = rs.getString(2);;
             p.mapId = rs.getInt(3);
             p.pos_x = rs.getInt(4);
@@ -63,7 +61,7 @@ public class InvokeCharacterInWorldHandler implements Handler {
     }
 
     @Override
-    public Class getPayloadTemplate() {
-        return InvokeCharacterInWorldPayload.class;
+    public Object getPayload(Packet packet) {
+        return new InvokeCharacterInWorldPayload(packet.readInt());
     }
 }

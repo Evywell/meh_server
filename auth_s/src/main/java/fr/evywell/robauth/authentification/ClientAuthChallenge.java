@@ -63,9 +63,8 @@ public class ClientAuthChallenge {
             stmtUpdSecret.execute();
 
             // 7. On envoie le paquet de succès
-            Packet pck = new Packet();
-            pck.setCmd(AUTH_CLIENT_LOGIN_SUCCEED);
-            pck.add("secret", secret);
+            Packet pck = new Packet(AUTH_CLIENT_LOGIN_SUCCEED);
+            pck.putString(secret);
             this.session.send(pck);
         } catch (SQLException e) {
             e.printStackTrace();

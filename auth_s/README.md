@@ -1,7 +1,7 @@
 # Base de données
 accounts:
  - id INT PRIMARY KEY AUTO_INCREMENT
- - UUID VARCHAR
+ - uuid VARCHAR
  - username VARCHAR
  - password VARCHAR
  - salt VARCHAR

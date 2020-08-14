@@ -72,4 +72,13 @@ public class Vector3 {
         return magnitude;
     }
 
+    @Override
+    public String toString() {
+        return "Vector3{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", magnitude=" + magnitude +
+                '}';
+    }
 }

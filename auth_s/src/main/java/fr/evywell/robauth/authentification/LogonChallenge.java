@@ -95,15 +95,14 @@ public class LogonChallenge {
             tokenStmt.setInt(2, userId);
             tokenStmt.execute();
 
-            session.setUuid(rs.getString(2)); // UUID
+            session.setGuid(rs.getString(2)); // uuid
             session.setToken(token);
             session.setAuthenticated(true);
 
             // On envoie le token
             Log.info(String.format("Connexion de <%s> effectuée avec succès. Token: <%s>", tram.login, token));
-            Packet pck = new Packet();
-            pck.setCmd(AUTH_LOGIN_SUCCEED);
-            pck.add("token", token);
+            Packet pck = new Packet(AUTH_LOGIN_SUCCEED);
+            pck.putString(token);
             this.session.send(pck);
         } catch (SQLException e) {
             e.printStackTrace();

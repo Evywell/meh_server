@@ -8,7 +8,7 @@ import io.netty.channel.Channel;
 
 public class AuthSession extends Session {
 
-    private String uuid;
+    private String guid;
     private String token;
     private boolean authenticated = false;
     private boolean gameServer = false;
@@ -41,11 +41,11 @@ public class AuthSession extends Session {
         this.token = token;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getGuid() {
+        return guid;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }

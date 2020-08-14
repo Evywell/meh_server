@@ -3,6 +3,7 @@ package fr.evywell.robauth.network;
 import com.jsoniter.JsonIterator;
 import fr.evywell.common.logger.Log;
 import fr.evywell.common.network.MalformedRequestException;
+import fr.evywell.common.network.Packet;
 import fr.evywell.common.network.Server;
 import fr.evywell.common.network.Session;
 import fr.evywell.robauth.authentification.AuthTram;
@@ -56,35 +57,28 @@ public class AuthServer extends Server
     }
 
     @Override
-    public void dispatch(int _cmd, JsonIterator iterator, Session session) throws MalformedRequestException {
+    public void dispatch(int _cmd, Packet packet, Session session) throws MalformedRequestException {
         if (_cmd < 0) {
             throw new MalformedRequestException(String.format("La command %s n'existe pas", _cmd));
         }
         // Un ptit switch case
         switch (_cmd) {
             case AUTH_LOGON_CHALLENGE:
-                try {
-                    AuthTram tram = iterator.read(AuthTram.class);
-                    (new LogonChallenge(tram, (AuthSession) session)).proceed();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                AuthTram authTram = new AuthTram();
+                authTram.login = packet.readString();
+                authTram.password = packet.readString();
+                (new LogonChallenge(authTram, (AuthSession) session)).proceed();
                 break;
             case AUTH_CLIENT_CHALLENGE:
-                try {
-                    ClientTram tram = iterator.read(ClientTram.class);
-                    (new ClientAuthChallenge(tram, (AuthSession) session)).proceed();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                ClientTram clientTram = new ClientTram();
+                clientTram.client_id = packet.readString();
+                (new ClientAuthChallenge(clientTram, (AuthSession) session)).proceed();
                 break;
             case AUTH_GAME_TICKET:
-                try {
-                    TicketTram tram = iterator.read(TicketTram.class);
-                    (new HandleGameTicketRequest(tram, (AuthSession) session)).proceed();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                TicketTram ticketTram = new TicketTram();
+                ticketTram.game_code = packet.readString();
+                ticketTram.token = packet.readString();
+                (new HandleGameTicketRequest(ticketTram, (AuthSession) session)).proceed();
                 break;
             default:
                 throw new MalformedRequestException(String.format("La command %s n'existe pas", _cmd));

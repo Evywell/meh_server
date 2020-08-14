@@ -1,5 +1,6 @@
 package fr.evywell.common.network;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
@@ -8,9 +9,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class ClientResponseFuture implements Future<String> {
+public class ClientResponseFuture implements Future<ByteBuf> {
     private volatile State state = State.WAITING;
-    ArrayBlockingQueue<String> blockingResponse = new ArrayBlockingQueue<String>(1);
+    ArrayBlockingQueue<ByteBuf> blockingResponse = new ArrayBlockingQueue<ByteBuf>(1);
 
     private enum State {
         WAITING,
@@ -44,16 +45,16 @@ public class ClientResponseFuture implements Future<String> {
      *
      */
     @Override
-    public String get() throws InterruptedException, ExecutionException {
-        String aux = blockingResponse.take();
+    public ByteBuf get() throws InterruptedException, ExecutionException {
+        ByteBuf aux = blockingResponse.take();
         blockingResponse.put(aux);
         return aux;
     }
 
     @Override
-    public String get(long timeout, TimeUnit unit) throws InterruptedException,
+    public ByteBuf get(long timeout, TimeUnit unit) throws InterruptedException,
             ExecutionException, TimeoutException {
-        final String responseAfterWait = blockingResponse.poll(timeout, unit);
+        final ByteBuf responseAfterWait = blockingResponse.poll(timeout, unit);
         if (responseAfterWait == null) {
             throw new TimeoutException();
         }
@@ -77,53 +78,53 @@ public class ClientResponseFuture implements Future<String> {
     }
 
     @Override
-    public Future<String> addListener(
-            GenericFutureListener<? extends Future<? super String>> listener) {
+    public Future<ByteBuf> addListener(
+            GenericFutureListener<? extends Future<? super ByteBuf>> listener) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<String> addListeners(
-            GenericFutureListener<? extends Future<? super String>>... listeners) {
+    public Future<ByteBuf> addListeners(
+            GenericFutureListener<? extends Future<? super ByteBuf>>... listeners) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<String> removeListener(
-            GenericFutureListener<? extends Future<? super String>> listener) {
+    public Future<ByteBuf> removeListener(
+            GenericFutureListener<? extends Future<? super ByteBuf>> listener) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<String> removeListeners(
-            GenericFutureListener<? extends Future<? super String>>... listeners) {
+    public Future<ByteBuf> removeListeners(
+            GenericFutureListener<? extends Future<? super ByteBuf>>... listeners) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<String> sync() throws InterruptedException {
+    public Future<ByteBuf> sync() throws InterruptedException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<String> syncUninterruptibly() {
+    public Future<ByteBuf> syncUninterruptibly() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<String> await() throws InterruptedException {
+    public Future<ByteBuf> await() throws InterruptedException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<String> awaitUninterruptibly() {
+    public Future<ByteBuf> awaitUninterruptibly() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -154,7 +155,7 @@ public class ClientResponseFuture implements Future<String> {
     }
 
     @Override
-    public String getNow() {
+    public ByteBuf getNow() {
         return blockingResponse.poll();
     }
 
@@ -171,7 +172,7 @@ public class ClientResponseFuture implements Future<String> {
      *
      * @param msg
      */
-    public void set(String msg) {
+    public void set(ByteBuf msg) {
         if (state == State.DONE) {
             return;
         }

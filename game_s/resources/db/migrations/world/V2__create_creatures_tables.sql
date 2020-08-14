@@ -9,7 +9,7 @@
 --
 
 CREATE TABLE `creatures` (
-  `UUID` varchar(50) NOT NULL,
+  `uuid` INT PRIMARY KEY AUTO_INCREMENT,
   `creature_template_id` int(11) NOT NULL,
   `map_id` int(11) NOT NULL,
   `pos_x` float NOT NULL,
@@ -22,10 +22,10 @@ CREATE TABLE `creatures` (
 -- Déchargement des données de la table `creatures`
 --
 
-INSERT INTO `creatures` (`UUID`, `creature_template_uuid`, `map_id`, `pos_x`, `pos_y`, `pos_z`, `orientation`) VALUES
-('7050ecad-d202-49f5-bc26-fbd9b53227e4', 1, 1, 2, 0, 1, 0),
-('c0bae98a-4ed6-4427-927d-7e8b8da0241f', 1, 1, 0, 0, 0, 0),
-('cb700998-d457-40ae-9025-fb30a8d7fda8', 2, 1, 2, 0, 2, 0);
+INSERT INTO `creatures` (`uuid`, `creature_template_id`, `map_id`, `pos_x`, `pos_y`, `pos_z`, `orientation`) VALUES
+(1, 1, 1, 2, 0, 1, 0),
+(2, 1, 1, 0, 0, 0, 0),
+(3, 2, 1, 2, 0, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -34,7 +34,7 @@ INSERT INTO `creatures` (`UUID`, `creature_template_uuid`, `map_id`, `pos_x`, `p
 --
 
 CREATE TABLE `creatures_templates` (
-  `id` int(11) AUTO_INCREMENT,
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -70,18 +70,6 @@ INSERT INTO `creatures_templates_locales` (`creature_template_id`, `locale`, `na
 --
 -- Index pour les tables déchargées
 --
-
---
--- Index pour la table `creatures`
---
-ALTER TABLE `creatures`
-  ADD PRIMARY KEY (`UUID`);
-
---
--- Index pour la table `creatures_templates`
---
-ALTER TABLE `creatures_templates`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `creatures_templates_locales`

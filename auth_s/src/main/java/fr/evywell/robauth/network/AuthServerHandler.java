@@ -1,9 +1,11 @@
 package fr.evywell.robauth.network;
 
 import fr.evywell.common.logger.Log;
-import fr.evywell.common.network.RequestFoundation;
+import fr.evywell.common.network.Packet;
 import fr.evywell.common.network.Server;
 import fr.evywell.common.network.Session;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -28,9 +30,22 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
         // Construction de l'objet qui représente la requête
         Session s = this.server.getSession(ctx.channel().hashCode());
         try {
-            RequestFoundation rq = RequestFoundation.fromString((String) msg);
-            this.server.dispatch(rq.getCmd(), rq.getBody(), s);
+            ByteBuf buffer = Unpooled.copiedBuffer((byte[])msg);
+            byte[] bytes;
+            int length = buffer.readableBytes();
+
+            if (buffer.hasArray()) {
+                bytes = buffer.array();
+            } else {
+                bytes = new byte[length];
+                buffer.getBytes(buffer.readerIndex(), bytes);
+            }
+            Log.info(String.format("Lecture de %d bytes", length));
+            Packet packet = new Packet(bytes);
+
+            this.server.dispatch(packet.getOpcode(), packet, s);
         } catch (Exception e) {
+            e.printStackTrace();
             Log.error(String.format("Paquet mal formé. Déconnexion du client... %s, cause: %s", ipClient, e.getMessage()));
             s.kick();
         }
@@ -59,5 +74,6 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
         Session s = this.server.getSession(ctx.channel().hashCode());
         s.kick();
         Log.error(cause.toString());
+        cause.printStackTrace();
     }
 }

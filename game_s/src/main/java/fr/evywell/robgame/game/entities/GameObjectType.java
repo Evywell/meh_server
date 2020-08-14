@@ -1,4 +1,4 @@
-package fr.evywell.robgame.game.gameobject;
+package fr.evywell.robgame.game.entities;
 
 public class GameObjectType {
 
