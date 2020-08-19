@@ -15,7 +15,7 @@ public class TicketHandler implements Handler {
 
     @Override
     public void call(Session session, Object payload, Packet packet) {
-        app.setTicket(((TicketTram)payload).ticket);
+        app.setTicket(packet.readString());
         try {
             app.getGameClient().connect();
             app.getGameClient().sendLoginToGameServerPacket(app.getTicket(), app.getToken());
@@ -25,7 +25,7 @@ public class TicketHandler implements Handler {
     }
 
     @Override
-    public Class getPayloadTemplate() {
-        return TicketTram.class;
+    public Object getPayload(Packet packet) {
+        return null;
     }
 }

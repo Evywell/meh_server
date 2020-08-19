@@ -85,17 +85,17 @@ public class LogonChallenge {
             }
 
             // Tout va bien
-            int userId = rs.getInt(1);
+            String userId = rs.getString(1);
             // Génération du token d'authentification
             token = this.randomString.nextString();
 
             // On sauvegarde le token en base
             PreparedStatement tokenStmt = this.authDb.getPreparedStatement(AuthQuery.AUTH_UPD_ACCOUNT_TOKEN);
             tokenStmt.setString(1, token);
-            tokenStmt.setInt(2, userId);
+            tokenStmt.setString(2, userId);
             tokenStmt.execute();
 
-            session.setGuid(rs.getString(2)); // uuid
+            session.setGuid(rs.getString(1)); // uuid
             session.setToken(token);
             session.setAuthenticated(true);
 

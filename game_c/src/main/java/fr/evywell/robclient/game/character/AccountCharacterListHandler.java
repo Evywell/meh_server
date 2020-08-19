@@ -16,6 +16,7 @@ public class AccountCharacterListHandler implements Handler {
 
     @Override
     public void call(Session session, Object payload, Packet packet) {
+        /*
         AccountCharacterListTram tram = (AccountCharacterListTram) payload;
         Log.info(String.format("Tu as (%d) personnages sur ce compte", tram.num_characters));
         for (Character c : tram.characters) {
@@ -24,10 +25,11 @@ public class AccountCharacterListHandler implements Handler {
         if (!tram.characters.isEmpty()) {
             app.getGameClient().sendInvokeCharacterInWorldPacket(tram.characters.get(0));
         }
+         */
     }
 
     @Override
-    public Class getPayloadTemplate() {
-        return AccountCharacterListTram.class;
+    public Object getPayload(Packet packet) {
+        return null;
     }
 }

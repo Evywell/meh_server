@@ -6,7 +6,6 @@ import fr.evywell.common.container.Service;
 import fr.evywell.common.database.Database;
 import fr.evywell.common.logger.Log;
 import fr.evywell.common.network.BasicServerInitializer;
-import fr.evywell.common.network.Server;
 import fr.evywell.robauth.cli.AuthServerCLI;
 import fr.evywell.robauth.config.AuthConfigHandler;
 import fr.evywell.robauth.config.DatabaseConfigHandler;
