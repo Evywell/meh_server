@@ -95,7 +95,7 @@ public class LogonChallenge {
             tokenStmt.setString(2, userId);
             tokenStmt.execute();
 
-            session.setGuid(rs.getString(2)); // uuid
+            session.setGuid(rs.getString(1)); // uuid
             session.setToken(token);
             session.setAuthenticated(true);
 
