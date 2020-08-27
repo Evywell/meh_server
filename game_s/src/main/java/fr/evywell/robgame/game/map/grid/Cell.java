@@ -2,7 +2,9 @@ package fr.evywell.robgame.game.map.grid;
 
 import fr.evywell.robgame.game.entities.GameObject;
 import fr.evywell.robgame.game.map.grid.notifier.AbstractDeliverVisitor;
+import fr.evywell.robgame.game.map.grid.notifier.AbstractVisitor;
 import fr.evywell.robgame.game.map.grid.notifier.GridNotifier;
+import fr.evywell.robgame.game.map.grid.notifier.VisibilityChangesVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +39,15 @@ public class Cell {
         this.gameObjects.remove(go);
     }
 
-    public void visitPlayers(AbstractDeliverVisitor visitor) {
+    public void visitPlayers(AbstractVisitor visitor) {
         this.grid.visitPlayers(this, visitor);
+    }
+
+    public void visitPlayersWithNeighboring(AbstractVisitor visitor) {
+        Cell[] cells = this.getNeighboring();
+        for (Cell cell : cells) {
+            cell.visitPlayers(visitor);
+        }
     }
 
     public Cell[] getNeighboring() {

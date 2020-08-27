@@ -1,13 +1,17 @@
 package fr.evywell.robgame.game.map.grid;
 
+import fr.evywell.common.logger.Log;
 import fr.evywell.common.maths.Vector3;
 import fr.evywell.robgame.game.entities.GameObject;
 import fr.evywell.robgame.game.entities.ObjectGuid;
 import fr.evywell.robgame.game.entities.Player;
 import fr.evywell.robgame.game.entities.Unit;
 import fr.evywell.robgame.game.map.grid.notifier.AbstractDeliverVisitor;
+import fr.evywell.robgame.game.map.grid.notifier.AbstractVisitor;
 import fr.evywell.robgame.game.map.grid.notifier.GridNotifier;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 
 public class Grid {
@@ -62,7 +66,7 @@ public class Grid {
         }
     }
 
-    public void visitPlayers(Cell cell, AbstractDeliverVisitor visitor) {
+    public void visitPlayers(Cell cell, AbstractVisitor visitor) {
         // Je pense que ça peut être optimisé
         this.notifiers.get(GridNotifier.GridNotifierType.PLAYER).emit(cell, visitor);
     }
@@ -137,7 +141,8 @@ public class Grid {
     }
 
     public static boolean isValidPosition(float x) {
-        return Float.isFinite(x) && x <= HALF_MAX_GRID_WIDTH ; // Est-ce que le point est dans la plus grande map possible
+        float absX = Math.abs(x);
+        return Float.isFinite(x) && absX <= HALF_MAX_GRID_WIDTH && (absX == 0 || absX > 0.001); // Est-ce que le point est dans la plus grande map possible
     }
 
     private void addListenersForPlayer(Cell cell, Player p) {

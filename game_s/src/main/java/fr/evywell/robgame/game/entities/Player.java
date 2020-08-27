@@ -5,33 +5,28 @@ import fr.evywell.common.network.Packet;
 import fr.evywell.common.timer.IntervalTimer;
 import fr.evywell.robgame.game.movement.MovementInfo;
 import fr.evywell.robgame.network.WorldSession;
+import fr.evywell.robgame.network.entities.AddGameObjectPacket;
+import fr.evywell.robgame.network.entities.RemoveGameObjectPacket;
 import fr.evywell.robgame.opcode.Opcode;
 import fr.evywell.robgame.world.WorldTime;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import static fr.evywell.robgame.game.movement.MovementType.*;
 
 public class Player extends Unit {
 
     private byte cellStatus;
-    private IntervalTimer timer;
+    private IntervalTimer cleanTimer;
     private WorldSession session;
+    private List<ObjectGuid> clientGuids; // Liste des objets gérés par le client
 
     public Player(WorldSession session) {
-        this.timer = new IntervalTimer(300);
+        this.cleanTimer = new IntervalTimer(5000);
         this.session = session;
-    }
-
-    public void sendGameObjectUpdate(GameObject go) {
-        /*
-        Packet pck = new Packet(Opcode.SMSG_NOTIFY_PLAYER_GAME_OBJECT_STATE);
-        pck.putInt(go.uuid);
-        pck.putInt(go.mapId);
-        pck.putFloat(go.pos_x);
-        pck.putFloat(go.pos_y);
-        pck.putFloat(go.pos_z);
-        pck.putFloat( go.orientation);
-        session.send(pck);
-         */
-        //Log.info(String.format("Le joueur %s a reçu un message de la créature %s !", this.hashCode(), go.uuid));
+        this.clientGuids = new CopyOnWriteArrayList<>();
     }
 
     public void sendPacket(Packet packet) {
@@ -41,10 +36,10 @@ public class Player extends Unit {
     @Override
     public void update(int delta) {
         super.update(delta);
-        timer.update(delta);
-        if (timer.passed()) {
-
-            timer.reset();
+        cleanTimer.update(delta);
+        if (cleanTimer.passed()) {
+            this.cleanClientVisibilityObjects();
+            cleanTimer.reset();
         }
     }
 
@@ -77,4 +72,36 @@ public class Player extends Unit {
         move(direction.multiply(WorldTime.getDeltaTime()));
     }
 
+    public boolean clientHasObject(GameObject go) {
+        return go == this || (this.clientGuids.contains(go.guid));
+    }
+
+    public void updateVisibilityOf(GameObject go) {
+        if (clientHasObject(go)) {
+            if (!canSeeOrDetect(go)) {
+                clientGuids.remove(go.guid);
+                this.sendPacket(new RemoveGameObjectPacket(go));
+            }
+        } else {
+            if (canSeeOrDetect(go)) {
+                clientGuids.add(go.guid);
+                this.sendPacket(new AddGameObjectPacket(go));
+            }
+        }
+    }
+
+    private void cleanClientVisibilityObjects() {
+        if (clientGuids.isEmpty())
+            return;
+
+        for (ObjectGuid guid : clientGuids) {
+            GameObject go = getMap().findGameObject(guid);
+            if (go == null) {
+                clientGuids.remove(guid);
+                this.sendPacket(new RemoveGameObjectPacket(guid));
+                return;
+            }
+            updateVisibilityOf(go);
+        }
+    }
 }

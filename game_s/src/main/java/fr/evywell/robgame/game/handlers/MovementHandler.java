@@ -43,7 +43,7 @@ public class MovementHandler extends AbstractHandler {
     @Override
     public Object getPayload(Packet packet) {
         MovementPayload payload = new MovementPayload();
-        payload.guid = packet.readInt();
+        payload.guid = packet.readInt(); // ça ne sert à rien car override dans le call()
         payload.posX = packet.readFloat();
         payload.posY = packet.readFloat();
         payload.posZ = packet.readFloat();

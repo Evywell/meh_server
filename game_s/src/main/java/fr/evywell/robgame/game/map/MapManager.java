@@ -35,6 +35,8 @@ public class MapManager {
                 structure.instanceId = 0;
                 structure.gridW = rs.getInt(3);
                 structure.gridH = rs.getInt(4);
+                // TODO: Ajouter en base
+                //structure.sightDistance = rs.getFloat(5);
                 cachedMaps.put(structure.mapId, structure);
             }
         } catch (SQLException e) {
@@ -57,7 +59,7 @@ public class MapManager {
             throw new Exception(String.format("Impossible de créer la carte %d car inconnue", mapId));
         }
         Map.MapStructure structure = cachedMaps.get(mapId);
-        Map m = new Map(mapId, instanceId, maxPlayer, structure.gridW, structure.gridH);
+        Map m = new Map(mapId, instanceId, maxPlayer, structure.gridW, structure.gridH, structure.sightDistance);
         Log.info("Chargement de la carte mapId=" + mapId + " instanceId=" + instanceId);
         // On construit la grille
         Grid g = new Grid(structure.gridW, structure.gridH);

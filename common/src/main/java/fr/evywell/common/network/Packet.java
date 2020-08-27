@@ -87,6 +87,12 @@ public class Packet {
         return this;
     }
 
+    public Packet putByte(byte value) {
+        readableBuffer.put(value);
+        length += 1;
+        return this;
+    }
+
     public byte[] getBytes() {
         return readableBuffer.array();
     }

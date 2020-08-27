@@ -24,7 +24,7 @@ public class GridNotifier {
         listeningCells = new HashMap<>();
     }
 
-    public void emit(Cell cell, AbstractDeliverVisitor visitor) {
+    public void emit(Cell cell, AbstractVisitor visitor) {
         gameObjects.forEach(go -> {
             if (go.getCell().equals(cell)) {
                 visitor.visit(go);

@@ -23,6 +23,7 @@ public class Map {
     protected final int maxPlayers;
     protected final int width;
     protected final int height;
+    protected final float sightDistance;
     protected Grid grid;
     protected VirtualMap vmap;
 
@@ -33,18 +34,25 @@ public class Map {
     protected CreatureManager creatureManager;
 
     public static final int MAX_PLAYERS = 20;
+    public static final float DEFAULT_SIGHT_RANGE = 20.0f;
 
-    public Map(int mapId, int instanceId, int maxPlayers, int width, int height) {
+    public Map(int mapId, int instanceId, int maxPlayers, int width, int height, float sightDistance) {
         this.mapId = mapId;
         this.instanceId = instanceId;
         this.maxPlayers = maxPlayers;
         this.width = width;
         this.height = height;
+        this.sightDistance = sightDistance;
         this.creatureManager = (CreatureManager) Container.getInstance(fr.evywell.robgame.Service.CREATURE_MANAGER);
         this.players = new HashMap<>();
         this.creatures = new HashMap<>();
         this.gos = new HashMap<>();
     }
+
+    public Map(int mapId, int instanceId, int maxPlayers, int width, int height) {
+        this(mapId, instanceId, maxPlayers, width, height, Map.DEFAULT_SIGHT_RANGE);
+    }
+
 
     public void update(int delta) {
         for (GameObject go : this.players.values()) {
@@ -149,6 +157,7 @@ public class Map {
                 c.mapId = mapId;
                 c.name = t.name;
                 c.guid = ObjectGuid.createCreature(rs.getInt(1));
+                c.sightDistance = t.sightDistance;
                 c.pos_x = rs.getFloat(3);
                 c.pos_y = rs.getFloat(4);
                 c.pos_z = rs.getFloat(5);
@@ -178,11 +187,20 @@ public class Map {
         return height;
     }
 
+    public int getMapId() {
+        return mapId;
+    }
+
+    public float getSightDistance() {
+        return this.sightDistance;
+    }
+
     public static class MapStructure {
         int mapId;
         int instanceId;
         int maxPlayers = MAX_PLAYERS;
         int gridW, gridH;
+        float sightDistance = Map.DEFAULT_SIGHT_RANGE;
     }
 
 }

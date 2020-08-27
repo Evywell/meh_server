@@ -7,6 +7,7 @@ import java.util.Map;
 public class Creature extends Unit {
 
     private IntervalTimer timer;
+    public float sightDistance;
 
     public Creature() {
         this.timer = new IntervalTimer(1000);
@@ -35,5 +36,6 @@ public class Creature extends Unit {
     public static class Template {
         public int id;
         public String name;
+        public float sightDistance = 20f;
     }
 }
