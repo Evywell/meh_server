@@ -31,7 +31,7 @@ public class InvokeCharacterInWorldHandler implements Handler {
     public void call(Session session, Object payload, Packet packet) {
         InvokeCharacterInWorldPayload tram = (InvokeCharacterInWorldPayload) payload;
         Log.info("Invoke Player in World: " + tram.character_uuid);
-        PreparedStatement stmtCharacter = this.characterDb.getPreparedStatement(CharacterQuery.SEL_CHARACTER_BY_uuid);
+        PreparedStatement stmtCharacter = this.characterDb.getPreparedStatement(CharacterQuery.SEL_CHARACTER_BY_UUID);
         try {
             stmtCharacter.setString(1, ((WorldSession) session).getUserGuid());
             stmtCharacter.setInt(2, tram.character_uuid);
@@ -40,6 +40,7 @@ public class InvokeCharacterInWorldHandler implements Handler {
             ResultSet rs = stmtCharacter.getResultSet();
             if (!rs.next()) {
                 // Aucune correspondance en base de données
+                Log.error(String.format("Impossible d'invoquer le personne: couple GUID<%s> et UUID<%d> incorrect", ((WorldSession) session).getUserGuid(), tram.character_uuid));
                 return;
             }
             Player p = new Player((WorldSession) session);

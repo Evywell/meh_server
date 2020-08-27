@@ -2,6 +2,7 @@ package fr.evywell.robgame.game.entities;
 
 import fr.evywell.common.event.EventManager;
 import fr.evywell.common.logger.Log;
+import fr.evywell.common.network.Packet;
 import fr.evywell.robgame.game.map.grid.Grid;
 import fr.evywell.robgame.game.spell.Spell;
 import fr.evywell.robgame.game.spell.SpellInfo;
@@ -10,7 +11,7 @@ import fr.evywell.robgame.network.combat.KillPacket;
 
 public class Unit extends GameObject {
 
-    private EventManager eventManager;
+    private final EventManager eventManager;
     protected int health = 100; // TODO: Retirer ça
     protected float speed = 1.0f;
     public String name;
@@ -85,6 +86,12 @@ public class Unit extends GameObject {
             return (Player) this;
         }
         return null;
+    }
+
+    @Override
+    public void putIntoPacket(Packet src) {
+        super.putIntoPacket(src);
+        src.putString(name);
     }
 
     public EventManager getEventManager() {

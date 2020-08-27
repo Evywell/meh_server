@@ -34,6 +34,7 @@ public class Opcode {
     public static final int SMSG_NOTIFY_PLAYER_GAME_OBJECT_STATE = 0x130; // 304
     public static final int SMSG_MOVE_UPDATE = 0x131; // 305
     public static final int SMSG_GAME_OBJECT_INFO = 0x132; // 306
+    public static final int SMSG_UPDATE_OBJECT = 0x133; // 307
 
     public static final int SMSG_COMBAT_KILL = 0x258; // 600
 

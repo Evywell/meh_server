@@ -29,6 +29,8 @@ public class CreatureManager extends GameObjectManager {
                 ct = new Creature.Template();
                 ct.id = rs.getInt(1);
                 ct.name = rs.getString(2);
+                // TODO: Ajouter ça en base
+                //ct.sightDistance = rs.getFloat(3);
                 cachedCreatures.put(ct.id, ct);
             }
         } catch (SQLException e) {
