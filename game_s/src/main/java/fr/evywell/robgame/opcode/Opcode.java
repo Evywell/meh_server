@@ -23,8 +23,8 @@ public class Opcode {
     public static final int CMSG_INVOKE_CHARACTER_CLIENT_READY = 0x12E; // 302
     // MOVING
     public static final int CMSG_MOVE_CHANGE = 0x131; // 305
-    public static final int CMSG_MOVE_STOP = 0x132; // 311
-    public static final int CMSG_CAST_SPELL = 0x133;
+    public static final int CMSG_MOVE_STOP = 0x132; // 306
+    public static final int CMSG_CAST_SPELL = 0x133; // 307
 
     // SMSG
     public static final int SMSG_ACCOUNT_CHARACTER_LIST = 0xC9;

@@ -54,9 +54,9 @@ public class World {
     }
 
     public void start() {
-        Container.setInstance(fr.evywell.robgame.Service.OPCODE_HANDLER, new OpcodeHandler());
         this.worldDb = (Database) Container.getInstance(Service.SERVICE_DATABASE_WORLD);
         this._initializeAndReset();
+        Container.setInstance(fr.evywell.robgame.Service.OPCODE_HANDLER, new OpcodeHandler());
     }
 
     public void update(int delta) {
@@ -135,6 +135,7 @@ public class World {
 
     private void _initializeAndReset() {
         this.spellManager = new SpellManager(worldDb);
+        Container.setInstance(fr.evywell.robgame.Service.SPELL_MANAGER, spellManager);
         this.mapManager.initializeCachedMaps();
         this.creatureManager.initializeCachedCreatures();
         try {

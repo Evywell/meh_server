@@ -24,7 +24,7 @@ public class Unit extends GameObject {
     @Override
     public void update(int delta) {
         super.update(delta);
-        eventManager.update(delta); // Le system de Spell
+        eventManager.update(delta); // Le système de Spell
     }
 
     public float getSpeed() {

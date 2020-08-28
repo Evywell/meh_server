@@ -1,6 +1,8 @@
 package fr.evywell.common.event;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventManager {
 
@@ -9,12 +11,12 @@ public class EventManager {
 
     public EventManager() {
         internalTime = 0;
-        events = new HashMap<>();
+        events = new ConcurrentHashMap<>();
     }
 
     public void addEvent(Event event, int time) {
         if (!events.containsKey(time)) {
-            events.put(time, new ArrayList<>());
+            events.put(time, new CopyOnWriteArrayList<>());
         }
         List<Event> e = events.get(time);
         e.add(event);
@@ -34,7 +36,9 @@ public class EventManager {
                 continue;
             }
             for (Event event : events) {
-                if (event.execute(localTime, internalTime)) { }
+                if (!event.execute(localTime, internalTime)) {
+                    addEvent(event, calculateTime(1));
+                }
                 events.remove(event);
             }
         }

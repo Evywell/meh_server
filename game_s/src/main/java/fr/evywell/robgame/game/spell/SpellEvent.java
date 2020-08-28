@@ -13,6 +13,6 @@ public class SpellEvent extends Event {
     @Override
     public boolean execute(int localTime, int internalTime) {
         spell.update(localTime);
-        return true;
+        return spell.getSpellState() == Spell.SpellState.SPELL_STATE_DONE;
     }
 }
