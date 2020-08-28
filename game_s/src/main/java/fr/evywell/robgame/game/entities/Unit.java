@@ -4,9 +4,11 @@ import fr.evywell.common.event.EventManager;
 import fr.evywell.common.logger.Log;
 import fr.evywell.common.network.Packet;
 import fr.evywell.robgame.game.map.grid.Grid;
+import fr.evywell.robgame.game.map.grid.notifier.CombatLogVisitor;
 import fr.evywell.robgame.game.spell.Spell;
 import fr.evywell.robgame.game.spell.SpellInfo;
 import fr.evywell.robgame.game.spell.SpellTarget;
+import fr.evywell.robgame.network.combat.CombatLogPacket;
 import fr.evywell.robgame.network.combat.KillPacket;
 
 public class Unit extends GameObject {
@@ -68,6 +70,21 @@ public class Unit extends GameObject {
         return true;
     }
 
+    public void sendDamageLog(Spell spell, int damages) {
+        // Construction du packet
+        CombatLogPacket combatLogPacket = new CombatLogPacket();
+        combatLogPacket.source = spell.getCaster().guid;
+        combatLogPacket.target = spell.getTargets().targetGuid;
+        combatLogPacket.damages = damages;
+        sendCombatLog(combatLogPacket);
+    }
+
+    public void sendCombatLog(CombatLogPacket packet) {
+        // On envoie le tout par l'intermédiaire d'un visitor
+        CombatLogVisitor visitor = new CombatLogVisitor(packet);
+        this.cell.visitPlayersWithNeighboring(visitor);
+    }
+
     public void setHealth(int health) {
         this.health = health;
     }
@@ -97,4 +114,5 @@ public class Unit extends GameObject {
     public EventManager getEventManager() {
         return eventManager;
     }
+
 }

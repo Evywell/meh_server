@@ -37,5 +37,6 @@ public class Opcode {
     public static final int SMSG_UPDATE_OBJECT = 0x133; // 307
 
     public static final int SMSG_COMBAT_KILL = 0x258; // 600
+    public static final int SMSG_SPELL_DAMAGE = 0x259; // 601
 
 }

@@ -6,10 +6,9 @@ import fr.evywell.robgame.game.entities.Unit;
 public class Spell {
 
     private SpellState spellState;
-    private Unit caster;
-    private Unit target;
-    private SpellInfo spellInfo;
+    private final Unit caster;
     private SpellTarget targets;
+    private final SpellInfo spellInfo;
     private int castTimer;
 
     // TEMP
@@ -56,32 +55,38 @@ public class Spell {
                     }
                 }
                 if (castTimer == 0) {
-                    Log.debug("Boom"); // On va remplacer ça hein ;)
                     this.applyEffects();
                     spellState = SpellState.SPELL_STATE_DONE;
-                    // TODO: Il est temps de lancer le sort
                 }
                 break;
         }
     }
 
     public void effectInstantKill() {
-        if (caster == null || target == null) {
+        if (caster == null || targets == null) {
             return;
         }
-        caster.dealDamage(target, target.getHealth());
+        caster.dealDamage(targets.mainTarget, targets.mainTarget.getHealth());
     }
 
     public void effectSchoolDamage(int schoolMask, int damage) {
-        if (caster == null || target == null) {
+        if (caster == null || targets == null || targets.mainTarget == null) {
             return;
         }
-        int finalDamage = caster.dealDamage(target, damage);
+        int finalDamage = caster.dealDamage(targets.mainTarget, damage);
         totalDamages += finalDamage;
     }
 
     public SpellState getSpellState() {
         return spellState;
+    }
+
+    public SpellTarget getTargets() {
+        return targets;
+    }
+
+    public Unit getCaster() {
+        return caster;
     }
 
     private void initTargets(SpellTarget target) {
@@ -93,9 +98,10 @@ public class Spell {
         }
         target.targetMask = targetMask;
         if ((targetMask & SPELL_CAST_TARGET_SINGLE) != 0) {
-            target.mainTarget = caster.getMap().findGameObject(target.targetGuid);
+            target.mainTarget = (Unit) caster.getMap().findGameObject(target.targetGuid);
         }
         // TODO: Ajouter le cas de l'AOE en sauvegardant l'origine de l'AOE
+        this.targets = target;
     }
 
     private void applyEffects() {
@@ -104,7 +110,9 @@ public class Spell {
             effect.apply();
         }
         // On envoie le log
-        
+        if (totalDamages > 0) {
+            caster.sendDamageLog(this, totalDamages);
+        }
     }
 
     public static class Effect {
