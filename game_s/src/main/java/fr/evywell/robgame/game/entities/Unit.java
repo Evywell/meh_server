@@ -44,9 +44,11 @@ public class Unit extends GameObject {
 
         if (victim.getHealth() <= 0) {
             kill(victim);
-        } else {
+        }
+
+        if (this instanceof Player) {
             HealthUpdatePacket packet = new HealthUpdatePacket(victim.guid, victim.getHealth());
-            sendPacketToSet(packet, null);
+            ((Player) this).sendPacket(packet);
         }
 
         return damages;
@@ -91,6 +93,8 @@ public class Unit extends GameObject {
 
     public void setHealth(int health) {
         this.health = health;
+        // La vie de l'unité a changée donc on l'ajoute dans la prochaine update
+        getMap().addObjectToUpdate(this);
     }
 
     public int getHealth() {

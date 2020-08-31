@@ -9,12 +9,14 @@ import fr.evywell.robgame.database.WorldQuery;
 import fr.evywell.robgame.game.entities.*;
 import fr.evywell.robgame.game.map.grid.Cell;
 import fr.evywell.robgame.game.map.grid.Grid;
+import fr.evywell.robgame.network.entities.UpdateGameObjectPacket;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Map {
 
@@ -30,6 +32,7 @@ public class Map {
     protected java.util.Map<Integer, Player> players;
     protected java.util.Map<Integer, Unit> creatures;
     protected java.util.Map<Integer, GameObject> gos;
+    protected List<GameObject> updatedGameObjects;
 
     protected CreatureManager creatureManager;
 
@@ -47,6 +50,7 @@ public class Map {
         this.players = new HashMap<>();
         this.creatures = new HashMap<>();
         this.gos = new HashMap<>();
+        this.updatedGameObjects = new CopyOnWriteArrayList<>();
     }
 
     public Map(int mapId, int instanceId, int maxPlayers, int width, int height) {
@@ -64,6 +68,22 @@ public class Map {
         for (GameObject go : this.gos.values()) {
             go.update(delta);
         }
+
+        sendObjectUpdate();
+    }
+
+    public void addObjectToUpdate(GameObject go) {
+        updatedGameObjects.add(go);
+    }
+
+    public void sendObjectUpdate() {
+        if (updatedGameObjects.isEmpty()) {
+            return;
+        }
+        for (GameObject go : updatedGameObjects) {
+            go.sendPacketToSet(new UpdateGameObjectPacket(go), null);
+        }
+        updatedGameObjects.clear();
     }
 
     public void addToMap(GameObject go) {
