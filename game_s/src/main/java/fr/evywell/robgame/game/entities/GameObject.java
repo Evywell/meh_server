@@ -40,7 +40,7 @@ public class GameObject {
 
     public void sendPacketToSet(Packet packet, Player skipPlayer) {
         // On créé un visiteur qui va se charger de toute la partie callback
-        PacketDeliverVisitor visitor = new PacketDeliverVisitor(this, packet, skipPlayer);
+        PacketDeliverVisitor visitor = new PacketDeliverVisitor(this, packet, skipPlayer, skipPlayer != null);
         this.cell.visitPlayersWithNeighboring(visitor);
     }
 

@@ -19,10 +19,10 @@ import static java.util.Map.entry;
 public class SpellManager {
 
     private Map<Integer, String> effectRegistry;
-    private Map<Integer, SpellInfo> spellRegistry;
-    private Map<Integer, AuraInfo> auraRegistry;
-    private Map<Integer, List<String>> spellScriptRegistry;
-    private Database worldDb;
+    private final Map<Integer, SpellInfo> spellRegistry;
+    private final Map<Integer, AuraInfo> auraRegistry;
+    private final Map<Integer, List<String>> spellScriptRegistry;
+    private final Database worldDb;
 
     public SpellManager(Database worldDb) {
         this.worldDb = worldDb;

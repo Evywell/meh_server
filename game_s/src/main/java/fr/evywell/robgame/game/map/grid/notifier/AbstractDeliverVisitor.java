@@ -8,15 +8,21 @@ public abstract class AbstractDeliverVisitor extends AbstractVisitor {
 
     protected final GameObject source;
     protected final Packet packet;
+    protected final boolean skipSource;
 
-    public AbstractDeliverVisitor(GameObject source, Packet packet) {
+    public AbstractDeliverVisitor(GameObject source, Packet packet, boolean skipSource) {
         this.source = source;
         this.packet = packet;
+        this.skipSource = skipSource;
+    }
+
+    public AbstractDeliverVisitor(GameObject source, Packet packet) {
+        this(source, packet, true);
     }
 
     public void sendPacket(Player target) {
         // On ne peut pas envoyer un packet à la source
-        if (source.equals(target)) {
+        if (skipSource && source.equals(target)) {
             return;
         }
         target.sendPacket(packet);

@@ -9,12 +9,13 @@ import fr.evywell.robgame.game.spell.Spell;
 import fr.evywell.robgame.game.spell.SpellInfo;
 import fr.evywell.robgame.game.spell.SpellTarget;
 import fr.evywell.robgame.network.combat.CombatLogPacket;
+import fr.evywell.robgame.network.combat.HealthUpdatePacket;
 import fr.evywell.robgame.network.combat.KillPacket;
 
 public class Unit extends GameObject {
 
     private final EventManager eventManager;
-    protected int health = 100; // TODO: Retirer ça
+    protected int health = 2000; // TODO: Retirer ça
     protected float speed = 1.0f;
     public String name;
 
@@ -43,6 +44,9 @@ public class Unit extends GameObject {
 
         if (victim.getHealth() <= 0) {
             kill(victim);
+        } else {
+            HealthUpdatePacket packet = new HealthUpdatePacket(victim.guid, victim.getHealth());
+            sendPacketToSet(packet, null);
         }
 
         return damages;

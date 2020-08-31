@@ -8,9 +8,13 @@ public class PacketDeliverVisitor extends AbstractDeliverVisitor {
 
     private final Player skipPlayer;
 
-    public PacketDeliverVisitor(GameObject source, Packet packet, Player skipPlayer) {
-        super(source, packet);
+    public PacketDeliverVisitor(GameObject source, Packet packet, Player skipPlayer, boolean skipSource) {
+        super(source, packet, skipSource);
         this.skipPlayer = skipPlayer;
+    }
+
+    public PacketDeliverVisitor(GameObject source, Packet packet, Player skipPlayer) {
+        this(source, packet, skipPlayer, true);
     }
 
     @Override
