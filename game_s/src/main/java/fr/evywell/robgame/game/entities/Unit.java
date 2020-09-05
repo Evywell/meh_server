@@ -92,7 +92,7 @@ public class Unit extends GameObject {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health = Math.max(health, 0);
         // La vie de l'unité a changée donc on l'ajoute dans la prochaine update
         getMap().addObjectToUpdate(this);
     }
@@ -117,6 +117,7 @@ public class Unit extends GameObject {
     public void putIntoPacket(Packet src) {
         super.putIntoPacket(src);
         src.putString(name);
+        src.putInt(health);
     }
 
     public EventManager getEventManager() {

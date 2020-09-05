@@ -35,8 +35,7 @@ public class MapManager {
                 structure.instanceId = 0;
                 structure.gridW = rs.getInt(3);
                 structure.gridH = rs.getInt(4);
-                // TODO: Ajouter en base
-                //structure.sightDistance = rs.getFloat(5);
+                structure.sightDistance = rs.getFloat(5);
                 cachedMaps.put(structure.mapId, structure);
             }
         } catch (SQLException e) {

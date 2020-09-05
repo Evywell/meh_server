@@ -9,7 +9,7 @@ INSERT INTO `spells` (`ID`, `name`, `description`, `cost`, `resource_type`, `coo
 --
 INSERT INTO `effects` (`ID`, `name`, `param1`, `param2`) VALUES
 ('1', 'APPLY_AURA', 'aura', NULL),
-('2', 'SCHOOL_DAMAGE', 'value', 'school'),
+('2', 'SCHOOL_DAMAGE', 'school', 'value'),
 ('3', 'DECREASE_MOVEMENT_SPEED_PERCENT', 'value', NULL),
 ('4', 'INSTANT_KILL', NULL, NULL);
 
@@ -22,8 +22,9 @@ INSERT INTO `auras` (`ID`, `name`, `description`, `flags`) VALUES
 --
 -- Spells Effects
 --
-INSERT INTO `spells_effects` (`SPELL_ID`, `EFFECT_ID`, `value1`, `value2`, `position`) VALUES
-('1', '1', '1', NULL, '0'); -- Add effect APPLY_AURA with the AURA_ID 1 (Frostbolt)
+INSERT INTO `spells_effects` (`SPELL_ID`, `EFFECT_ID`, `position`, `value1`, `value2`, `target_mask`) VALUES
+('1', '1', '0', '1', NULL, '0'), -- Add effect APPLY_AURA with the AURA_ID 1 (Frostbolt)
+('1', '2', '1', '2', 500, '1'); -- Add effect SCHOOL_DAMAGE with SCHOOL 2 (Frost) and 500 damages
 
 --
 -- Auras Effects

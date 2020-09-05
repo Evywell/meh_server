@@ -142,6 +142,11 @@ public class Spell {
 
     }
 
+    public static class School {
+        public static final int
+            FROST = 2;
+    }
+
     public enum SpellState { SPELL_STATE_NONE, SPELL_STATE_PREPARING, SPELL_STATE_DONE }
 
 }
