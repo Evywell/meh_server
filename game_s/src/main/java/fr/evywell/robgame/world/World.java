@@ -115,6 +115,10 @@ public class World {
         return !this.running;
     }
 
+    public void shutdown() {
+        this.running = false;
+    }
+
     public RealmConfig getRealm() {
         return realm;
     }

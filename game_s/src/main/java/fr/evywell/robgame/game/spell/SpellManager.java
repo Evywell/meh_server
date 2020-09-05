@@ -48,6 +48,20 @@ public class SpellManager {
         this.loadAurasFromDb();
     }
 
+    public void reload() {
+        // Reset de tout
+        spellRegistry.clear();
+        auraRegistry.clear();
+        spellScriptRegistry.clear();
+
+        // Loading
+        try {
+            this.loadFromDb();
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+        }
+    }
+
     public void loadScriptsFromDb() throws SQLException {
         Statement stmt = worldDb.executeStatement(WorldQuery.SEL_SPELLS_SCRIPTS);
         ResultSet rs = stmt.getResultSet();

@@ -8,10 +8,8 @@ import fr.evywell.common.logger.Log;
 import fr.evywell.common.network.AuthClient;
 import fr.evywell.common.network.BasicServerInitializer;
 import fr.evywell.common.network.Packet;
-import fr.evywell.common.network.RequestFoundation;
-import fr.evywell.robgame.authentication.ClientTram;
+import fr.evywell.robgame.cli.WorldServerCLI;
 import fr.evywell.robgame.config.*;
-import fr.evywell.robgame.game.entities.ObjectGuid;
 import fr.evywell.robgame.network.GameServerHandler;
 import fr.evywell.robgame.network.WorldServer;
 import fr.evywell.robgame.world.World;
@@ -45,14 +43,17 @@ public class Main {
         server.handle(new BasicServerInitializer(null, new GameServerHandler(server)));
         server.start();
 
+        WorldServerCLI worldServerCLI = new WorldServerCLI(world, server);
+        worldServerCLI.initCommands();
         initAuthSecret();
 
         startMysql();
         world.start();
-
+        worldServerCLI.handle();
         server.loop();
 
         System.out.println("System halting");
+        worldServerCLI.shutdown();
         System.exit(0);
     }
 

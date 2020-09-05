@@ -9,6 +9,7 @@ import fr.evywell.common.network.Session;
 import fr.evywell.robgame.Main;
 import fr.evywell.robgame.authentication.AuthTram;
 import fr.evywell.robgame.authentication.AuthenticationChallenge;
+import fr.evywell.robgame.cli.WorldServerCLI;
 import fr.evywell.robgame.world.World;
 import fr.evywell.robgame.world.WorldTime;
 
@@ -71,6 +72,7 @@ public class WorldServer extends Server {
 
     @Override
     public void afterStopping() {
+        world.shutdown();
         Main.stopMysql();
     }
 

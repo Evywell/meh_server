@@ -22,6 +22,10 @@ dependencies {
     compile project(':common')
 }
 
+run {
+    standardInput = System.in
+}
+
 flyway {
     url = 'jdbc:mysql://localhost:33306'
     schemas = ['rob_world2']
