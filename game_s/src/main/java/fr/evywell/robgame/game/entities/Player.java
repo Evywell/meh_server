@@ -29,7 +29,7 @@ public class Player extends Unit {
         this.clientGuids = new CopyOnWriteArrayList<>();
     }
 
-    public void sendPacket(Packet packet) {
+    public synchronized void sendPacket(Packet packet) {
         this.session.send(packet);
     }
 

@@ -1,7 +1,9 @@
 package fr.evywell.robgame.game.spell;
 
 import fr.evywell.common.logger.Log;
+import fr.evywell.robgame.game.entities.Player;
 import fr.evywell.robgame.game.entities.Unit;
+import fr.evywell.robgame.network.spell.OutOfRangePacket;
 
 public class Spell {
 
@@ -32,6 +34,20 @@ public class Spell {
         initTargets(target);
 
         spellState = SpellState.SPELL_STATE_PREPARING;
+
+        // Vérification de la range
+        if (
+            spellInfo.range > 0 &&
+            (target.mainTarget == null || !caster.isWithinDistance(target.mainTarget, spellInfo.range))
+        ) {
+            // Trop loin !
+            spellState = SpellState.SPELL_FAILED;
+            if (caster instanceof Player) {
+                OutOfRangePacket packet = new OutOfRangePacket(this);
+                ((Player) caster).sendPacket(packet);
+                return;
+            }
+        }
 
         SpellEvent spellEvent = new SpellEvent(this);
         caster.getEventManager().addEvent(spellEvent, caster.getEventManager().calculateTime(1));
@@ -147,7 +163,7 @@ public class Spell {
             FROST = 2;
     }
 
-    public enum SpellState { SPELL_STATE_NONE, SPELL_STATE_PREPARING, SPELL_STATE_DONE }
+    public enum SpellState { SPELL_STATE_NONE, SPELL_STATE_PREPARING, SPELL_STATE_DONE, SPELL_FAILED }
 
 }
 

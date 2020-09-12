@@ -39,5 +39,6 @@ public class Opcode {
     public static final int SMSG_COMBAT_KILL = 0x258; // 600
     public static final int SMSG_SPELL_DAMAGE = 0x259; // 601
     public static final int SMSG_HEALTH_UPDATE = 0x25A; // 602
+    public static final int SMSG_CAST_FAILED = 0x25B; // 603
 
 }
