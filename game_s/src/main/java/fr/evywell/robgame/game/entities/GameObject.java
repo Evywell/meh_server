@@ -84,7 +84,7 @@ public class GameObject {
      * @param sightRange la distance
      * @return boolean
      */
-    private boolean isWithinDistance(GameObject go, float sightRange) {
+    public boolean isWithinDistance(GameObject go, float sightRange) {
         float goPosX = go.pos_x;
         float goPosZ = go.pos_z;
 
